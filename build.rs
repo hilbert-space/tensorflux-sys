@@ -3,13 +3,12 @@ extern crate pkg_config;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-const NAME: &'static str = "tensorflow";
 const SOURCE_URL: &'static str = "https://github.com/tensorflow/tensorflow.git";
 
 macro_rules! get(($name:expr) => (::std::env::var($name).unwrap()));
 
 fn main() {
-    if pkg_config::find_library(NAME).is_ok() {
+    if pkg_config::find_library("tensorflow").is_ok() {
         return;
     }
 
@@ -30,6 +29,24 @@ fn main() {
                                   .arg("build")
                                   .arg("--compilation_mode=opt")
                                   .arg("tensorflow:libtensorflow.so"));
+
+    println!("cargo:rustc-link-lib=dylib=tensorflow");
+    println!("cargo:rustc-link-search={}", find(&output, "libtensorflow.so").unwrap().display());
+}
+
+fn find(directory: &Path, file: &str) -> Option<PathBuf> {
+    for entry in std::fs::read_dir(directory).unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
+        if path.is_dir() {
+            if let Some(path) = find(&path, file) {
+                return Some(path);
+            }
+        } else if path.ends_with(file) {
+            return Some(directory.into());
+        }
+    }
+    None
 }
 
 fn run<F>(name: &str, mut configure: F) where F: FnMut(&mut Command) -> &mut Command {
