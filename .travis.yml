@@ -1,10 +1,6 @@
 language: python
 sudo: false
 
-os:
-  - linux
-  - osx
-
 python:
   - "3.5"
 
@@ -17,24 +13,17 @@ install:
   - pip install --upgrade pip
   - pip install --upgrade numpy
 
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      brew update;
-      brew install bazel swig;
-    else
-      export CC="gcc-4.9";
-      export CXX="g++-4.9";
-      curl -o jdk_switcher.sh -L ${JDK_SWITCHER_URL};
-      source ./jdk_switcher.sh;
-      jdk_switcher use oraclejdk8;
-      curl -o bazel.sh -L ${BAZEL_URL};
-      chmod +x bazel.sh;
-      ./bazel.sh --user;
-    fi
+  - export CC="gcc-4.9";
+  - export CXX="g++-4.9";
+  - curl -o jdk_switcher.sh -L ${JDK_SWITCHER_URL};
+  - source ./jdk_switcher.sh;
+  - jdk_switcher use oraclejdk8;
+  - curl -o bazel.sh -L ${BAZEL_URL};
+  - chmod +x bazel.sh;
+  - ./bazel.sh --user;
 
 after_success:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      curl https://stainless-steel.github.io/travis/documentation.sh | bash
-    fi
+  - curl https://stainless-steel.github.io/travis/documentation.sh | bash
 
 script:
   - cargo test -vv -j 1
