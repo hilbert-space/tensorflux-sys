@@ -1,16 +1,23 @@
-language: rust
+language: python
 sudo: false
 
+python:
+  - "3.5"
+
 rust:
-  - stable
-  - beta
   - nightly
+
+install:
+  - pip install --upgrade pip
+  - pip install scipy numpy
+  - pip install "${TENSORFLOW_URL}"
 
 after_success:
   - curl https://stainless-steel.github.io/travis/documentation.sh | bash
 
 env:
   global:
+    - TENSORFLOW_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.9.0rc0-cp35-cp35m-linux_x86_64.whl
     - secure: e9u/seD+fjtg74/Yva5GyzlJ7b3E+5X0emz+TX+3TWfzlXf8UHY32+YYVFtAolIBdDK/UG6lr3iUFAmCqO57hEp/CMwIBLxLekkWr9BUwNmqzr/HabPwDaFo6Z4624Pro1EAUkWjVam1rwLaWLxl7dzv6uuXIRP2aGJfODUsvII0jIP0eE1mkCimrgn8w6EtgFTCDyjRI1TJJxsMakPNTDY4z3Y5c23gVFymI3FdS9LuXBYsJtsSFjsf0i+GwkrSYptsQuxKf2UAUlbHhwgJEG9dl1vg31tZZVekD8r7/cQMX2SHp9KOoBh1iNQ7SlwOM34kWJCkoxXwGAITu+NCyJvi/4KNurekI+0Iw+hu4xk2vDz3ZsKl+WeNBNsvi6nuvfQn12sKM2oxVvEK3UJeNgphGep68EO0uttOFwi4sVae00iiqP/SHwkVrqYBq8pposZ8VpJbbBR9uGlgSFajsbNQ3YpguBmqpEWsYtg9pfESoNKQ65n4RoSTmXyjpH4KcQwuJJAYANaeopLmACy1rVf9ZxZ619YKXEBTgt5cfFyeCa/ZMQ/uQBRBVYMY1yJu+MG+td7bbIgdet2uaQac7JZ3rfMD+HghiroWgME7SobKTPXpCFy5fcxo6+tVhZiKrnwPA4F8rtg1jSFbxTSyWnoykgdpTqP2cOZpmMg0mzc=
 
 notifications:
