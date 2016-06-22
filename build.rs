@@ -29,6 +29,7 @@ fn main() {
                                   .arg(format!("--output_base={}", output.display()))
                                   .arg("build")
                                   .arg("--compilation_mode=opt")
+                                  .arg(format!("--jobs={}", get!("NUM_JOBS")))
                                   .arg("tensorflow:libtensorflow.so"));
 
     println!("cargo:rustc-link-lib=dylib=tensorflow");

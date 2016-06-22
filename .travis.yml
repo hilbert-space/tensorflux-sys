@@ -21,6 +21,8 @@ install:
       brew update;
       brew install bazel swig;
     else
+      export CC="gcc-4.9";
+      export CXX="g++-4.9";
       curl -o jdk_switcher.sh -L ${JDK_SWITCHER_URL};
       source ./jdk_switcher.sh;
       jdk_switcher use oraclejdk8;
