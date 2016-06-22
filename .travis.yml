@@ -5,6 +5,7 @@ os:
   - osx
 
 install:
+  - brew update
   - brew install bazel swig
 
 after_success:
