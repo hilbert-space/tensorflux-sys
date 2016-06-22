@@ -1,28 +1,48 @@
-language: rust
+language: python
 sudo: false
 
 os:
   - linux
   - osx
 
+python:
+  - "3.5"
+
 install:
+  - curl ${RUSTUP_URL} -sSf | sh -s -- --default-toolchain ${TRAVIS_RUST_VERSION} -y
+  - export PATH="$HOME/.cargo/bin:${PATH}"
+  - rustc --version
+  - cargo --version
+
+  - pip install --upgrade pip
+  - pip install --upgrade numpy
+
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       brew update;
       brew install bazel swig;
     else
+      curl -o jdk_switcher.sh -L ${JDK_SWITCHER_URL};
+      source ./jdk_switcher.sh;
       jdk_switcher use oraclejdk8;
-      curl -o bazel.sh -L https://github.com/bazelbuild/bazel/releases/download/0.3.0/bazel-0.3.0-installer-linux-x86_64.sh;
+      curl -o bazel.sh -L ${BAZEL_URL};
       chmod +x bazel.sh;
       ./bazel.sh --user;
     fi
 
 after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      curl https://stainless-steel.github.io/travis/documentation.sh | sh
+      curl https://stainless-steel.github.io/travis/documentation.sh | bash
     fi
+
+script:
+  - cargo test --verbose
 
 env:
   global:
+    - BAZEL_URL=https://github.com/bazelbuild/bazel/releases/download/0.3.0/bazel-0.3.0-installer-linux-x86_64.sh
+    - JDK_SWITCHER_URL=https://raw.githubusercontent.com/michaelklishin/jdk_switcher/master/jdk_switcher.sh
+    - RUSTUP_URL=https://sh.rustup.rs
+    - TRAVIS_RUST_VERSION=nightly
     - secure: e9u/seD+fjtg74/Yva5GyzlJ7b3E+5X0emz+TX+3TWfzlXf8UHY32+YYVFtAolIBdDK/UG6lr3iUFAmCqO57hEp/CMwIBLxLekkWr9BUwNmqzr/HabPwDaFo6Z4624Pro1EAUkWjVam1rwLaWLxl7dzv6uuXIRP2aGJfODUsvII0jIP0eE1mkCimrgn8w6EtgFTCDyjRI1TJJxsMakPNTDY4z3Y5c23gVFymI3FdS9LuXBYsJtsSFjsf0i+GwkrSYptsQuxKf2UAUlbHhwgJEG9dl1vg31tZZVekD8r7/cQMX2SHp9KOoBh1iNQ7SlwOM34kWJCkoxXwGAITu+NCyJvi/4KNurekI+0Iw+hu4xk2vDz3ZsKl+WeNBNsvi6nuvfQn12sKM2oxVvEK3UJeNgphGep68EO0uttOFwi4sVae00iiqP/SHwkVrqYBq8pposZ8VpJbbBR9uGlgSFajsbNQ3YpguBmqpEWsYtg9pfESoNKQ65n4RoSTmXyjpH4KcQwuJJAYANaeopLmACy1rVf9ZxZ619YKXEBTgt5cfFyeCa/ZMQ/uQBRBVYMY1yJu+MG+td7bbIgdet2uaQac7JZ3rfMD+HghiroWgME7SobKTPXpCFy5fcxo6+tVhZiKrnwPA4F8rtg1jSFbxTSyWnoykgdpTqP2cOZpmMg0mzc=
 
 addons:
@@ -31,8 +51,8 @@ addons:
       - ubuntu-toolchain-r-test
 
     packages:
-      - g++-4.8
-      - gcc-4.8
+      - g++-4.9
+      - gcc-4.9
       - oracle-java8-installer
       - swig
 
