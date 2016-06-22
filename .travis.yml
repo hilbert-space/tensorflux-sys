@@ -34,9 +34,6 @@ addons:
       - g++-4.8
       - gcc-4.8
       - oracle-java8-installer
-      - pkg-config
-      - zip
-      - zlib1g-dev
 
 notifications:
   email: false
