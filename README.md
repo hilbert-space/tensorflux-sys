@@ -10,8 +10,9 @@ The build prerequisites of TensorFlow can be found on the [corresponding
 page][setup] of TensorFlow’s documentation. In particular, the following
 components are assumed to be installed:
 
-* [Bazel](http://www.bazel.io) and
-* [NumPy](http://www.numpy.org).
+* [Bazel](http://www.bazel.io),
+* [NumPy](http://www.numpy.org), and
+* [SWIG](http://www.swig.org).
 
 ## Compilation
 
