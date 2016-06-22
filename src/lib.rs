@@ -57,8 +57,13 @@ pub enum TF_Code {
 #[derive(Clone, Copy, Debug)]
 pub enum TF_Status {}
 
+#[repr(C)]
 #[derive(Clone, Copy, Debug)]
-pub enum TF_Buffer {}
+pub struct TF_Buffer {
+  pub data: *const c_void,
+  pub length: size_t,
+  data_deallocator: Option<unsafe extern "C" fn(data: *mut c_void, length: size_t)>,
+}
 
 #[derive(Clone, Copy, Debug)]
 pub enum TF_Library {}
@@ -93,8 +98,8 @@ extern "C" {
 
     pub fn TF_NewTensor(datatype: TF_DataType, dims: *mut c_longlong, num_dims: c_int,
                         data: *mut c_void, len: size_t,
-                        deallocator: unsafe extern "C" fn(data: *mut c_void, len: size_t,
-                                                          arg: *mut c_void),
+                        deallocator: Option<unsafe extern "C" fn(data: *mut c_void, len: size_t,
+                                                                 arg: *mut c_void)>,
                         deallocator_arg: *mut c_void) -> *mut TF_Tensor;
 
     pub fn TF_DeleteTensor(tensor: *mut TF_Tensor);
