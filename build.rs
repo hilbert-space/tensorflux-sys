@@ -28,8 +28,8 @@ fn main() {
     run("bazel", |command| command.current_dir(&source)
                                   .arg(format!("--output_base={}", output.display()))
                                   .arg("build")
-                                  .arg("--compilation_mode=opt")
                                   .arg(format!("--jobs={}", get!("NUM_JOBS")))
+                                  .arg("--compilation_mode=opt")
                                   .arg("tensorflow:libtensorflow.so"));
 
     println!("cargo:rustc-link-lib=dylib=tensorflow");

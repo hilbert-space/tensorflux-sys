@@ -37,7 +37,7 @@ after_success:
     fi
 
 script:
-  - cargo test --verbose
+  - cargo test -vv -j 1
 
 env:
   global:
