@@ -15,7 +15,16 @@ fn main() {
 
     let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("source");
     if !Path::new(&source.join(".git")).exists() {
-        Command::new("git").args(&["clone", "--recurse-submodules", SOURCE_URL])
-                           .arg(source).status().unwrap();
+        run("git", |command| command.args(&["clone", "--recurse-submodules", SOURCE_URL])
+                                    .arg(&source));
+    }
+
+    run("./configure", |command| command.current_dir(&source));
+}
+
+fn run<F>(name: &str, mut configure: F) where F: FnMut(&mut Command) -> &mut Command {
+    let mut command = Command::new(name);
+    if !configure(&mut command).status().unwrap().success() {
+        panic!("failed to execute {:?}", command);
     }
 }
