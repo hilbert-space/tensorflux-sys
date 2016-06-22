@@ -11,7 +11,7 @@ install:
   - cargo --version
 
   - pip install --upgrade pip
-  - pip install scipy numpy
+  - pip install numpy
   - pip install "${TENSORFLOW_URL}"
 
 script:
