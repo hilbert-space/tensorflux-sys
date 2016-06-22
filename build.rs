@@ -17,6 +17,7 @@ fn main() {
 
     if !Path::new(&source.join(".git")).exists() {
         run("git", |command| command.arg("clone")
+                                    .arg("--branch=v0.9.0rc0")
                                     .arg("--recurse-submodules")
                                     .arg(SOURCE_URL)
                                     .arg(&source));
