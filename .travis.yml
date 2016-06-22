@@ -15,9 +15,11 @@ install:
 
   - export CC="gcc-4.9";
   - export CXX="g++-4.9";
+
   - curl -o jdk_switcher.sh -L ${JDK_SWITCHER_URL};
   - source ./jdk_switcher.sh;
   - jdk_switcher use oraclejdk8;
+
   - curl -o bazel.sh -L ${BAZEL_URL};
   - chmod +x bazel.sh;
   - ./bazel.sh --user;
