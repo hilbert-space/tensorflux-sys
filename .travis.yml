@@ -1,33 +1,17 @@
-language: python
+language: rust
 sudo: false
-
-python:
-  - "3.5"
 
 os:
   - osx
 
 install:
-  - brew install bazel
-
-  - curl ${RUSTUP_URL} -sSf | sh -s -- --default-toolchain ${TRAVIS_RUST_VERSION} -y
-  - export PATH="$HOME/.cargo/bin:${PATH}"
-  - rustc --version
-  - cargo --version
-
-  - pip install --upgrade pip
-  - pip install --upgrade numpy
-
-script:
-  - cargo test --verbose
+  - brew install bazel swig
 
 after_success:
   - curl https://stainless-steel.github.io/travis/documentation.sh | bash
 
 env:
   global:
-    - RUSTUP_URL=https://sh.rustup.rs
-    - TRAVIS_RUST_VERSION=nightly
     - secure: e9u/seD+fjtg74/Yva5GyzlJ7b3E+5X0emz+TX+3TWfzlXf8UHY32+YYVFtAolIBdDK/UG6lr3iUFAmCqO57hEp/CMwIBLxLekkWr9BUwNmqzr/HabPwDaFo6Z4624Pro1EAUkWjVam1rwLaWLxl7dzv6uuXIRP2aGJfODUsvII0jIP0eE1mkCimrgn8w6EtgFTCDyjRI1TJJxsMakPNTDY4z3Y5c23gVFymI3FdS9LuXBYsJtsSFjsf0i+GwkrSYptsQuxKf2UAUlbHhwgJEG9dl1vg31tZZVekD8r7/cQMX2SHp9KOoBh1iNQ7SlwOM34kWJCkoxXwGAITu+NCyJvi/4KNurekI+0Iw+hu4xk2vDz3ZsKl+WeNBNsvi6nuvfQn12sKM2oxVvEK3UJeNgphGep68EO0uttOFwi4sVae00iiqP/SHwkVrqYBq8pposZ8VpJbbBR9uGlgSFajsbNQ3YpguBmqpEWsYtg9pfESoNKQ65n4RoSTmXyjpH4KcQwuJJAYANaeopLmACy1rVf9ZxZ619YKXEBTgt5cfFyeCa/ZMQ/uQBRBVYMY1yJu+MG+td7bbIgdet2uaQac7JZ3rfMD+HghiroWgME7SobKTPXpCFy5fcxo6+tVhZiKrnwPA4F8rtg1jSFbxTSyWnoykgdpTqP2cOZpmMg0mzc=
 
 notifications:

@@ -7,3 +7,8 @@ description = "The package provides bindings to TensorFlow."
 documentation = "https://stainless-steel.github.io/tensorflow-sys"
 homepage = "https://github.com/stainless-steel/tensorflow-sys"
 repository = "https://github.com/stainless-steel/tensorflow-sys"
+build = "build.rs"
+links = "tensorflow"
+
+[build-dependencies]
+pkg-config = "0.3"
