@@ -62,7 +62,7 @@ pub enum TF_Status {}
 pub struct TF_Buffer {
   pub data: *const c_void,
   pub length: size_t,
-  data_deallocator: Option<unsafe extern "C" fn(data: *mut c_void, length: size_t)>,
+  pub data_deallocator: Option<unsafe extern "C" fn(data: *mut c_void, length: size_t)>,
 }
 
 #[derive(Clone, Copy, Debug)]
