@@ -19,7 +19,7 @@ components are assumed to be installed:
 ## Compilation
 
 The configuration of the compilation process of TensorFlow is done via a number
-of environment variables, which can be found in TensorFlow’s
+of environment variables, all of which can be found in TensorFlow’s
 [configure][configure] script. In particular,
 
 * `PYTHON_BIN_PATH` is used to specify the location of Python, and
