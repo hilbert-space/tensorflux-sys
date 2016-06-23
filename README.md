@@ -4,10 +4,7 @@ The package provides bindings to [TensorFlow][homepage].
 
 ## [Documentation][doc]
 
-## Example
-
-An illustrative example can be found in
-[examples/workflow.rs](examples/workflow.rs).
+## [Example](examples/workflow.rs)
 
 ## Requirements
 
