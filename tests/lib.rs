@@ -1,10 +1,10 @@
-extern crate tensorflow_sys as raw;
+extern crate tensorflow_sys as ffi;
 
 #[test]
 fn link() {
     unsafe {
-        let buffer = raw::TF_NewBuffer();
+        let buffer = ffi::TF_NewBuffer();
         assert!(!buffer.is_null());
-        raw::TF_DeleteBuffer(buffer);
+        ffi::TF_DeleteBuffer(buffer);
     }
 }
