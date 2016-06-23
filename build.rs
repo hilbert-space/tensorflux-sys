@@ -12,8 +12,13 @@ fn main() {
         return;
     }
 
-    let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("source");
     let output = PathBuf::from(&get!("OUT_DIR"));
+
+    if link(&output) {
+        return;
+    }
+
+    let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("source");
 
     if !Path::new(&source.join(".git")).exists() {
         run("git", |command| command.arg("clone")
@@ -32,8 +37,7 @@ fn main() {
                                   .arg("--compilation_mode=opt")
                                   .arg("tensorflow:libtensorflow.so"));
 
-    println!("cargo:rustc-link-lib=dylib=tensorflow");
-    println!("cargo:rustc-link-search={}", find(&output, "libtensorflow.so").unwrap().display());
+    assert!(link(&output));
 }
 
 fn find(directory: &Path, file: &str) -> Option<PathBuf> {
@@ -44,11 +48,22 @@ fn find(directory: &Path, file: &str) -> Option<PathBuf> {
             if let Some(path) = find(&path, file) {
                 return Some(path);
             }
-        } else if path.ends_with(file) {
+        } else if path.is_file() && path.ends_with(file) {
             return Some(directory.into());
         }
     }
     None
+}
+
+fn link(directory: &Path) -> bool {
+    match find(directory, "libtensorflow.so") {
+        Some(directory) => {
+            println!("cargo:rustc-link-lib=dylib=tensorflow");
+            println!("cargo:rustc-link-search={}", directory.display());
+            true
+        },
+        _ => false,
+    }
 }
 
 fn run<F>(name: &str, mut configure: F) where F: FnMut(&mut Command) -> &mut Command {
