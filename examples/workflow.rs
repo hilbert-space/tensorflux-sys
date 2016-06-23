@@ -5,7 +5,7 @@ use libc::{c_int, c_longlong, c_void, size_t};
 use std::ffi::{CStr, CString};
 use std::path::Path;
 
-const GRAPH_PATH: &'static str = "tests/fixtures/graph.pb";
+const GRAPH_PATH: &'static str = "examples/fixtures/graph.pb";
 
 macro_rules! nonnull(
     ($pointer:expr) => ({
