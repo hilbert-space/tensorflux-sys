@@ -9,7 +9,7 @@ extern crate libc;
 use libc::{c_char, c_int, c_longlong, c_void, size_t};
 
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TF_DataType {
     TF_FLOAT = 1,
     TF_DOUBLE = 2,
@@ -31,9 +31,10 @@ pub enum TF_DataType {
     TF_COMPLEX128 = 18,
     TF_HALF = 19,
 }
+pub use TF_DataType::*;
 
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TF_Code {
     TF_OK = 0,
     TF_CANCELLED = 1,
@@ -53,6 +54,7 @@ pub enum TF_Code {
     TF_UNAVAILABLE = 14,
     TF_DATA_LOSS = 15,
 }
+pub use TF_Code::*;
 
 #[derive(Clone, Copy, Debug)]
 pub enum TF_Status {}
