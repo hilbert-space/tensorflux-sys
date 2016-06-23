@@ -24,12 +24,15 @@ macro_rules! success(
 );
 
 fn main() {
+    use std::mem::size_of;
+    use std::slice::from_raw_parts;
+
     unsafe {
         let options = nonnull!(ffi::TF_NewSessionOptions());
         let status = nonnull!(ffi::TF_NewStatus());
         let session = nonnull!(ffi::TF_NewSession(options, status));
 
-        let graph = read(GRAPH_PATH);
+        let graph = read(GRAPH_PATH); // c = a * b
         ffi::TF_ExtendGraph(session, graph.as_ptr() as *const _, graph.len() as size_t, status);
         success!(status);
 
@@ -37,7 +40,7 @@ fn main() {
         let mut inputs = vec![];
 
         let name = CString::new("a:0").unwrap();
-        let mut data = vec![1.0f32, 2.0f32];
+        let mut data = vec![1f32, 2f32, 3f32];
         let mut dims = vec![data.len() as c_longlong];
         let tensor = nonnull!(ffi::TF_NewTensor(ffi::TF_FLOAT, dims.as_mut_ptr(),
                                                 dims.len() as c_int, data.as_mut_ptr() as *mut _,
@@ -47,7 +50,7 @@ fn main() {
         inputs.push(tensor);
 
         let name = CString::new("b:0").unwrap();
-        let mut data = vec![3.0f32, 4.0f32];
+        let mut data = vec![4f32, 5f32, 6f32];
         let mut dims = vec![data.len() as c_longlong];
         let tensor = nonnull!(ffi::TF_NewTensor(ffi::TF_FLOAT, dims.as_mut_ptr(),
                                                 dims.len() as c_int, data.as_mut_ptr() as *mut _,
@@ -62,7 +65,7 @@ fn main() {
         let name = CString::new("c:0").unwrap();
 
         output_names.push(name.as_ptr());
-        outputs.push(0 as *mut _);
+        outputs.push(0 as *mut ffi::TF_Tensor);
 
         let mut target_names = vec![];
 
@@ -72,6 +75,13 @@ fn main() {
                     target_names.len() as c_int, 0 as *mut _, status);
         success!(status);
 
+        let tensor = nonnull!(outputs[0]);
+        let data = nonnull!(ffi::TF_TensorData(tensor)) as *const f32;
+        let data = from_raw_parts(data, ffi::TF_TensorByteSize(tensor) / size_of::<f32>());
+
+        assert_eq!(data, &[1.0 * 4.0, 2.0 * 5.0, 3.0 * 6.0]);
+
+        ffi::TF_DeleteTensor(tensor);
         ffi::TF_DeleteSession(session, status);
         ffi::TF_DeleteStatus(status);
         ffi::TF_DeleteSessionOptions(options);
