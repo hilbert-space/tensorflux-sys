@@ -4,6 +4,11 @@ The package provides bindings to [TensorFlow][homepage].
 
 ## [Documentation][doc]
 
+## Example
+
+An illustrative example can be found in
+[examples/workflow.rs](examples/workflow.rs).
+
 ## Requirements
 
 The build prerequisites of TensorFlow can be found on the [corresponding

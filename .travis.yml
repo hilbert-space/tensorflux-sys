@@ -29,6 +29,7 @@ after_success:
 
 script:
   - cargo test -vv -j 1
+  - cargo run --example=workflow
 
 env:
   global:
