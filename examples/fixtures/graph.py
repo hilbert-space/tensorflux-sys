@@ -6,6 +6,5 @@ with tf.Session() as session:
     a = tf.Variable(42.0, name='a')
     b = tf.Variable(69.0, name='b')
     c = tf.mul(a, b, name='c')
-    session.run(tf.initialize_all_variables())
     directory = os.path.dirname(os.path.realpath(__file__))
     tf.train.write_graph(session.graph_def, directory, 'graph.pb', as_text=False)
