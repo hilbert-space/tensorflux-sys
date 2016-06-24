@@ -18,7 +18,7 @@ fn main() {
 
     let output = PathBuf::from(&get!("OUT_DIR"));
     if !output.join(FILENAME).exists() {
-        let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("source");
+        let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("target/source");
         if !Path::new(&source.join(".git")).exists() {
             run("git", |command| command.arg("clone")
                                         .arg(format!("--branch=v{}", VERSION))
