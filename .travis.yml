@@ -11,7 +11,7 @@ after_success:
   - curl https://stainless-steel.github.io/travis/documentation.sh | bash
 
 script:
-  - cargo test -vv -j 2
+  - cargo test -vv -j 1
   - cargo run --example=workflow
 
 env:
