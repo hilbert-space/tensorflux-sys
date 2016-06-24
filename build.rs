@@ -43,14 +43,13 @@ fn main() {
 
 fn find(directory: &Path, file: &str) -> Option<PathBuf> {
     for entry in fs::read_dir(directory).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
+        let path = entry.unwrap().path();
         if path.is_dir() {
             if let Some(path) = find(&path, file) {
                 return Some(path);
             }
-        } else {
-            if path.is_file() && path.ends_with(file) {
+        } else if path.is_file() {
+            if path.ends_with(file) {
                 return Some(path);
             }
         }
