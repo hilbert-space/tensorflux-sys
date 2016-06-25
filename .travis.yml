@@ -6,12 +6,12 @@ install:
   - curl -LO https://stainless-steel.github.io/travis/bazel.sh && source bazel.sh
   - curl -LO https://stainless-steel.github.io/travis/rust.sh && source rust.sh
 
-after_success:
-  - curl https://stainless-steel.github.io/travis/documentation.sh | bash
-
 script:
   - cargo test -vv -j 1
   - cargo run --example=workflow
+
+after_success:
+  - curl https://stainless-steel.github.io/travis/documentation.sh | bash
 
 env:
   global:
