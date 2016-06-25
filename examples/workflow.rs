@@ -81,6 +81,8 @@ fn main() {
 
         assert_eq!(data, &[1.0 * 4.0, 2.0 * 5.0, 3.0 * 6.0]);
 
+        ffi::TF_CloseSession(session, status);
+
         ffi::TF_DeleteTensor(tensor);
         ffi::TF_DeleteSession(session, status);
         ffi::TF_DeleteStatus(status);
