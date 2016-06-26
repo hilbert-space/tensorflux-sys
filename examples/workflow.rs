@@ -15,7 +15,7 @@ macro_rules! nonnull(
     });
 );
 
-macro_rules! success(
+macro_rules! ok(
     ($status:expr) => ({
         if ffi::TF_GetCode($status) != ffi::TF_OK {
             panic!(CStr::from_ptr(ffi::TF_Message($status)).to_string_lossy().into_owned());
@@ -35,7 +35,7 @@ fn main() {
 
         let graph = read(GRAPH_PATH); // c = a * b
         ffi::TF_ExtendGraph(session, graph.as_ptr() as *const _, graph.len() as size_t, status);
-        success!(status);
+        ok!(status);
 
         let mut input_names = vec![];
         let mut inputs = vec![];
@@ -74,7 +74,7 @@ fn main() {
                     input_names.len() as c_int, output_names.as_mut_ptr(), outputs.as_mut_ptr(),
                     output_names.len() as c_int, target_names.as_mut_ptr(),
                     target_names.len() as c_int, null_mut(), status);
-        success!(status);
+        ok!(status);
 
         let tensor = nonnull!(outputs[0]);
         let data = nonnull!(ffi::TF_TensorData(tensor)) as *const f32;
