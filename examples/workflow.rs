@@ -25,6 +25,7 @@ macro_rules! success(
 
 fn main() {
     use std::mem::size_of;
+    use std::ptr::{null, null_mut};
     use std::slice::from_raw_parts;
 
     unsafe {
@@ -44,7 +45,7 @@ fn main() {
         let mut dims = vec![data.len() as c_longlong];
         let tensor = nonnull!(ffi::TF_NewTensor(ffi::TF_FLOAT, dims.as_mut_ptr(),
                                                 dims.len() as c_int, data.as_mut_ptr() as *mut _,
-                                                data.len() as size_t, Some(noop), 0 as *mut _));
+                                                data.len() as size_t, Some(noop), null_mut()));
 
         input_names.push(name.as_ptr());
         inputs.push(tensor);
@@ -54,7 +55,7 @@ fn main() {
         let mut dims = vec![data.len() as c_longlong];
         let tensor = nonnull!(ffi::TF_NewTensor(ffi::TF_FLOAT, dims.as_mut_ptr(),
                                                 dims.len() as c_int, data.as_mut_ptr() as *mut _,
-                                                data.len() as size_t, Some(noop), 0 as *mut _));
+                                                data.len() as size_t, Some(noop), null_mut()));
 
         input_names.push(name.as_ptr());
         inputs.push(tensor);
@@ -65,14 +66,14 @@ fn main() {
         let name = CString::new("c:0").unwrap();
 
         output_names.push(name.as_ptr());
-        outputs.push(0 as *mut ffi::TF_Tensor);
+        outputs.push(null_mut());
 
         let mut target_names = vec![];
 
-        ffi::TF_Run(session, 0 as *const _, input_names.as_mut_ptr(), inputs.as_mut_ptr(),
+        ffi::TF_Run(session, null(), input_names.as_mut_ptr(), inputs.as_mut_ptr(),
                     input_names.len() as c_int, output_names.as_mut_ptr(), outputs.as_mut_ptr(),
                     output_names.len() as c_int, target_names.as_mut_ptr(),
-                    target_names.len() as c_int, 0 as *mut _, status);
+                    target_names.len() as c_int, null_mut(), status);
         success!(status);
 
         let tensor = nonnull!(outputs[0]);
