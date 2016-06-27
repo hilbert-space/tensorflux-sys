@@ -12,7 +12,7 @@ The build prerequisites of TensorFlow can be found on the [corresponding
 page][setup] of TensorFlow’s documentation. In particular, [Bazel][bazel],
 [NumPy][numpy], and [SWIG][swig] are assumed to be installed.
 
-## Compilation
+## Configuration
 
 The compilation process of TensorFlow is configured via a number of environment
 variables, all of which can be found in TensorFlow’s [configure][configure]
