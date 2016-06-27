@@ -40,8 +40,8 @@ fn main() {
         let mut input_names = vec![];
         let mut inputs = vec![];
 
-        let name = CString::new("a:0").unwrap();
-        let mut data = vec![1f32, 2f32, 3f32];
+        let name = CString::new("a").unwrap();
+        let mut data = vec![1f32, 2.0, 3.0];
         let mut dims = vec![data.len() as c_longlong];
         let tensor = nonnull!(ffi::TF_NewTensor(ffi::TF_FLOAT, dims.as_mut_ptr(),
                                                 dims.len() as c_int, data.as_mut_ptr() as *mut _,
@@ -50,8 +50,8 @@ fn main() {
         input_names.push(name.as_ptr());
         inputs.push(tensor);
 
-        let name = CString::new("b:0").unwrap();
-        let mut data = vec![4f32, 5f32, 6f32];
+        let name = CString::new("b").unwrap();
+        let mut data = vec![4f32, 5.0, 6.0];
         let mut dims = vec![data.len() as c_longlong];
         let tensor = nonnull!(ffi::TF_NewTensor(ffi::TF_FLOAT, dims.as_mut_ptr(),
                                                 dims.len() as c_int, data.as_mut_ptr() as *mut _,
@@ -63,7 +63,7 @@ fn main() {
         let mut output_names = vec![];
         let mut outputs = vec![];
 
-        let name = CString::new("c:0").unwrap();
+        let name = CString::new("c").unwrap();
 
         output_names.push(name.as_ptr());
         outputs.push(null_mut());
