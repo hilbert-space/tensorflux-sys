@@ -5,8 +5,6 @@ use libc::{c_int, c_longlong, c_void, size_t};
 use std::ffi::{CStr, CString};
 use std::path::Path;
 
-const GRAPH_PATH: &'static str = "examples/fixtures/graph.pb";
-
 macro_rules! nonnull(
     ($pointer:expr) => ({
         let pointer = $pointer;
@@ -33,7 +31,7 @@ fn main() {
         let status = nonnull!(ffi::TF_NewStatus());
         let session = nonnull!(ffi::TF_NewSession(options, status));
 
-        let graph = read(GRAPH_PATH); // c = a * b
+        let graph = read("examples/assets/multiplication.pb"); // c = a * b
         ffi::TF_ExtendGraph(session, graph.as_ptr() as *const _, graph.len() as size_t, status);
         ok!(status);
 

@@ -27,7 +27,7 @@ will be licensed according to the terms given in [LICENSE.md](LICENSE.md).
 
 [bazel]: http://www.bazel.io
 [configure]: https://github.com/tensorflow/tensorflow/blob/master/configure
-[example]: examples/workflow.rs
+[example]: examples/multiplication.rs
 [numpy]: http://www.numpy.org
 [setup]: https://www.tensorflow.org/versions/r0.9/get_started/os_setup.html
 [swig]: http://www.swig.org
