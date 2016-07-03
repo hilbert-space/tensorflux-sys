@@ -10,7 +10,7 @@ install:
 
 script:
   - cargo test -vv -j 1
-  - cargo run --example=workflow
+  - cargo run --example=multiplication
 
 after_success:
   - curl https://stainless-steel.github.io/travis/documentation.sh | bash
