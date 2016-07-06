@@ -4,9 +4,9 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::{env, fs};
 
-const FILENAME: &'static str = "libtensorflow.so";
 const LIBRARY: &'static str = "tensorflow";
 const REPOSITORY: &'static str = "https://github.com/tensorflow/tensorflow.git";
+const TARGET: &'static str = "libtensorflow.so";
 const VERSION: &'static str = "0.9.0";
 
 macro_rules! get(($name:expr) => (ok!(env::var($name))));
@@ -18,7 +18,7 @@ fn main() {
     }
 
     let output = PathBuf::from(&get!("OUT_DIR"));
-    if !output.join(FILENAME).exists() {
+    if !output.join(TARGET).exists() {
         let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("target/source");
         if !Path::new(&source.join(".git")).exists() {
             run("git", |command| command.arg("clone")
@@ -27,16 +27,14 @@ fn main() {
                                         .arg(REPOSITORY)
                                         .arg(&source));
         }
-
         run("./configure", |command| command.current_dir(&source));
         run("bazel", |command| command.current_dir(&source)
                                       .arg("build")
                                       .arg(format!("--jobs={}", get!("NUM_JOBS")))
                                       .arg("--compilation_mode=opt")
-                                      .arg(format!("{}:{}", LIBRARY, FILENAME)));
-
+                                      .arg(format!("{}:{}", LIBRARY, TARGET)));
         let source = source.join("bazel-out/local-opt/bin/tensorflow");
-        ok!(fs::copy(source.join(FILENAME), output.join(FILENAME)));
+        ok!(fs::copy(source.join(TARGET), output.join(TARGET)));
     }
 
     println!("cargo:rustc-link-lib=dylib={}", LIBRARY);
