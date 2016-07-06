@@ -35,27 +35,12 @@ fn main() {
                                       .arg("--compilation_mode=opt")
                                       .arg(format!("{}:{}", LIBRARY, FILENAME)));
 
-        ok!(fs::copy(ok!(find(&source, FILENAME)), output.join(FILENAME)));
+        let source = source.join("bazel-out/local-opt/bin/tensorflow");
+        ok!(fs::copy(source.join(FILENAME), output.join(FILENAME)));
     }
 
     println!("cargo:rustc-link-lib=dylib={}", LIBRARY);
     println!("cargo:rustc-link-search={}", output.display());
-}
-
-fn find(directory: &Path, file: &str) -> Option<PathBuf> {
-    for entry in ok!(fs::read_dir(directory)) {
-        let path = ok!(entry).path();
-        if path.is_dir() {
-            if let Some(path) = find(&path, file) {
-                return Some(path);
-            }
-        } else if path.is_file() {
-            if path.ends_with(file) {
-                return Some(path);
-            }
-        }
-    }
-    None
 }
 
 fn run<F>(name: &str, mut configure: F) where F: FnMut(&mut Command) -> &mut Command {
