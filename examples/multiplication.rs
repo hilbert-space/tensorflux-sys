@@ -1,5 +1,5 @@
 extern crate libc;
-extern crate tensorflow_sys as ffi;
+extern crate tensorflux_sys as ffi;
 
 use libc::{c_int, c_longlong, c_void, size_t};
 use std::ffi::{CStr, CString};

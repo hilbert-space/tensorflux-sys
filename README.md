@@ -1,4 +1,4 @@
-# tensorflow-sys [![Version][version-icon]][version-page] [![Status][status-icon]][status-page]
+# tensorflux-sys [![Version][version-icon]][version-page] [![Status][status-icon]][status-page]
 
 The package provides bindings to [TensorFlow][tensorflow].
 
@@ -31,8 +31,8 @@ will be licensed according to the terms given in [LICENSE.md](LICENSE.md).
 [tensorflow-configure]: https://github.com/tensorflow/tensorflow/blob/r0.9/configure
 [tensorflow-setup]: https://www.tensorflow.org/versions/r0.9/get_started/os_setup.html
 
-[documentation]: https://stainless-steel.github.io/tensorflow-sys
-[status-icon]: https://travis-ci.org/stainless-steel/tensorflow-sys.svg?branch=master
-[status-page]: https://travis-ci.org/stainless-steel/tensorflow-sys
-[version-icon]: https://img.shields.io/crates/v/tensorflow-sys.svg
-[version-page]: https://crates.io/crates/tensorflow-sys
+[documentation]: https://stainless-steel.github.io/tensorflux-sys
+[status-icon]: https://travis-ci.org/stainless-steel/tensorflux-sys.svg?branch=master
+[status-page]: https://travis-ci.org/stainless-steel/tensorflux-sys
+[version-icon]: https://img.shields.io/crates/v/tensorflux-sys.svg
+[version-page]: https://crates.io/crates/tensorflux-sys
