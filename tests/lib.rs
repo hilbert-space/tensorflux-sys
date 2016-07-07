@@ -1,7 +1,7 @@
 extern crate tensorflow_sys as ffi;
 
 #[test]
-fn link() {
+fn linkage() {
     unsafe {
         let buffer = ffi::TF_NewBuffer();
         assert!(!buffer.is_null());
