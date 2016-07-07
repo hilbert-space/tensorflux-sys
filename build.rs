@@ -33,8 +33,7 @@ fn main() {
                                       .arg(format!("--jobs={}", get!("NUM_JOBS")))
                                       .arg("--compilation_mode=opt")
                                       .arg(format!("{}:{}", LIBRARY, TARGET)));
-        let source = source.join("bazel-out/local-opt/bin/tensorflow");
-        ok!(fs::copy(source.join(TARGET), output.join(TARGET)));
+        ok!(fs::copy(source.join("bazel-bin").join(LIBRARY).join(TARGET), output.join(TARGET)));
     }
 
     println!("cargo:rustc-link-lib=dylib={}", LIBRARY);
