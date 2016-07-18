@@ -18,6 +18,12 @@ The compilation process is configured via a number of environment variables, all
 of which can be found in TensorFlow’s [configure][tensorflow-configure] script.
 In particular, `TF_NEED_CUDA` is used to indicate if GPU support is needed.
 
+## Collaboration
+
+Rust has an IRC culture, and most real-time collaborations happen in a variety
+of channels on Mozilla’s IRC network, irc.mozilla.org. The channels that are
+relevant to TensorFlow are #rust-machine-learning and #rust-tensorflow.
+
 ## Contribution
 
 Your contribution is highly appreciated. Do not hesitate to open an issue or a
