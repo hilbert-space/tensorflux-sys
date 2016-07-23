@@ -81,7 +81,7 @@ pub enum TF_Tensor {}
 
 extern "C" {
     pub fn TF_NewBuffer() -> *mut TF_Buffer;
-    pub fn TF_NewBufferFromString(proto: *const c_void, proto_len: size_t) -> *mut TF_Buffer;
+    pub fn TF_NewBufferFromString(proto: *const c_void, length: size_t) -> *mut TF_Buffer;
     pub fn TF_DeleteBuffer(buffer: *mut TF_Buffer);
     pub fn TF_GetBuffer(buffer: *mut TF_Buffer) -> TF_Buffer;
 }
@@ -96,7 +96,7 @@ extern "C" {
                          -> *mut TF_Session;
     pub fn TF_DeleteSession(session: *mut TF_Session, status: *mut TF_Status);
     pub fn TF_CloseSession(session: *mut TF_Session, status: *mut TF_Status);
-    pub fn TF_ExtendGraph(session: *mut TF_Session, proto: *const c_void, proto_len: size_t,
+    pub fn TF_ExtendGraph(session: *mut TF_Session, proto: *const c_void, length: size_t,
                           status: *mut TF_Status);
     pub fn TF_Run(session: *mut TF_Session, run_options: *const TF_Buffer,
                   input_names: *mut *const c_char, inputs: *mut *mut TF_Tensor, ninputs: c_int,
@@ -117,7 +117,7 @@ extern "C" {
     pub fn TF_NewSessionOptions() -> *mut TF_SessionOptions;
     pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
     pub fn TF_SetTarget(options: *mut TF_SessionOptions, target: *const c_char);
-    pub fn TF_SetConfig(options: *mut TF_SessionOptions, proto: *const c_void, proto_len: size_t,
+    pub fn TF_SetConfig(options: *mut TF_SessionOptions, proto: *const c_void, length: size_t,
                         status: *mut TF_Status);
 }
 
@@ -131,9 +131,9 @@ extern "C" {
 
 extern "C" {
     pub fn TF_NewTensor(datatype: TF_DataType, dims: *mut c_longlong, ndims: c_int,
-                        data: *mut c_void, data_len: size_t,
+                        data: *mut c_void, length: size_t,
                         deallocator: Option<unsafe extern "C" fn(data: *mut c_void,
-                                                                 data_len: size_t,
+                                                                 length: size_t,
                                                                  arg: *mut c_void)>,
                         deallocator_arg: *mut c_void) -> *mut TF_Tensor;
     pub fn TF_DeleteTensor(tensor: *mut TF_Tensor);
