@@ -11,9 +11,9 @@ use libc::{c_char, c_int, c_longlong, c_void, size_t};
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
 pub struct TF_Buffer {
-  pub data: *const c_void,
-  pub length: size_t,
-  pub data_deallocator: Option<unsafe extern "C" fn(data: *mut c_void, length: size_t)>,
+    pub data: *const c_void,
+    pub length: size_t,
+    pub data_deallocator: Option<unsafe extern "C" fn(data: *mut c_void, length: size_t)>,
 }
 
 #[repr(C)]
