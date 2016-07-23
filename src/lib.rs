@@ -106,7 +106,7 @@ extern "C" {
     pub fn TF_PRunSetup(session: *mut TF_Session, input_names: *mut *const c_char, ninputs: c_int,
                         output_names: *mut *const c_char, noutputs: c_int,
                         target_names: *mut *const c_char, ntargets: c_int,
-                        handle: *mut *mut c_char, status: *mut TF_Status);
+                        handle: *mut *const c_char, status: *mut TF_Status);
     pub fn TF_PRun(session: *mut TF_Session, handle: *const c_char,
                    input_names: *mut *const c_char, inputs: *mut *mut TF_Tensor, ninputs: c_int,
                    output_names: *mut *const c_char, outputs: *mut *mut TF_Tensor, noutputs: c_int,
