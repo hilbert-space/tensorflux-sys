@@ -80,8 +80,8 @@ pub enum TF_Status {}
 pub enum TF_Tensor {}
 
 extern "C" {
-    pub fn TF_NewBufferFromString(proto: *const c_void, proto_len: size_t) -> *mut TF_Buffer;
     pub fn TF_NewBuffer() -> *mut TF_Buffer;
+    pub fn TF_NewBufferFromString(proto: *const c_void, proto_len: size_t) -> *mut TF_Buffer;
     pub fn TF_DeleteBuffer(buffer: *mut TF_Buffer);
     pub fn TF_GetBuffer(buffer: *mut TF_Buffer) -> TF_Buffer;
 }
@@ -94,24 +94,19 @@ extern "C" {
 extern "C" {
     pub fn TF_NewSession(options: *const TF_SessionOptions, status: *mut TF_Status)
                          -> *mut TF_Session;
-
-    pub fn TF_CloseSession(session: *mut TF_Session, status: *mut TF_Status);
     pub fn TF_DeleteSession(session: *mut TF_Session, status: *mut TF_Status);
-
+    pub fn TF_CloseSession(session: *mut TF_Session, status: *mut TF_Status);
     pub fn TF_ExtendGraph(session: *mut TF_Session, proto: *const c_void, proto_len: size_t,
                           status: *mut TF_Status);
-
     pub fn TF_Run(session: *mut TF_Session, run_options: *const TF_Buffer,
                   input_names: *mut *const c_char, inputs: *mut *mut TF_Tensor, ninputs: c_int,
                   output_names: *mut *const c_char, outputs: *mut *mut TF_Tensor, noutputs: c_int,
                   target_names: *mut *const c_char, ntargets: c_int, run_metadata: *mut TF_Buffer,
                   status: *mut TF_Status);
-
     pub fn TF_PRunSetup(session: *mut TF_Session, input_names: *mut *const c_char, ninputs: c_int,
                         output_names: *mut *const c_char, noutputs: c_int,
                         target_names: *mut *const c_char, ntargets: c_int,
                         handle: *mut *mut c_char, status: *mut TF_Status);
-
     pub fn TF_PRun(session: *mut TF_Session, handle: *const c_char,
                    input_names: *mut *const c_char, inputs: *mut *mut TF_Tensor, ninputs: c_int,
                    output_names: *mut *const c_char, outputs: *mut *mut TF_Tensor, noutputs: c_int,
@@ -120,12 +115,10 @@ extern "C" {
 
 extern "C" {
     pub fn TF_NewSessionOptions() -> *mut TF_SessionOptions;
+    pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
     pub fn TF_SetTarget(options: *mut TF_SessionOptions, target: *const c_char);
-
     pub fn TF_SetConfig(options: *mut TF_SessionOptions, proto: *const c_void, proto_len: size_t,
                         status: *mut TF_Status);
-
-    pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
 }
 
 extern "C" {
@@ -143,7 +136,6 @@ extern "C" {
                                                                  data_len: size_t,
                                                                  arg: *mut c_void)>,
                         deallocator_arg: *mut c_void) -> *mut TF_Tensor;
-
     pub fn TF_DeleteTensor(tensor: *mut TF_Tensor);
     pub fn TF_TensorType(tensor: *const TF_Tensor) -> TF_DataType;
     pub fn TF_NumDims(tensor: *const TF_Tensor) -> c_int;
