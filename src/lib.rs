@@ -130,7 +130,7 @@ extern "C" {
 }
 
 extern "C" {
-    pub fn TF_NewTensor(datatype: TF_DataType, dims: *mut int64_t, ndims: c_int,
+    pub fn TF_NewTensor(datatype: TF_DataType, dims: *const int64_t, ndims: c_int,
                         data: *mut c_void, length: size_t,
                         deallocator: Option<unsafe extern "C" fn(data: *mut c_void,
                                                                  length: size_t,
