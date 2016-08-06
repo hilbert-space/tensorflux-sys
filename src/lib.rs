@@ -110,6 +110,61 @@ extern {
 }
 
 #[derive(Clone, Copy, Debug)]
+pub enum TF_Graph {}
+
+#[derive(Clone, Copy, Debug)]
+pub enum TF_Node {}
+
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct TF_Port {
+    node: *mut TF_Node,
+    index: c_int,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum TF_SessionWithGraph {}
+
+extern {
+    pub fn TF_NewSessionWithGraph(graph: *mut TF_Graph, options: *const TF_SessionOptions,
+                                  status: *mut TF_Status) -> *mut TF_SessionWithGraph;
+    pub fn TF_CloseSessionWithGraph(session: *mut TF_SessionWithGraph, status: *mut TF_Status);
+    pub fn TF_DeleteSessionWithGraph(session: *mut TF_SessionWithGraph, status: *mut TF_Status);
+    pub fn TF_SessionRun(session: *mut TF_SessionWithGraph,
+                         run_options: *const TF_Buffer,
+                         inputs: *const TF_Port,
+                         input_values: *const *mut TF_Tensor,
+                         ninputs: c_int,
+                         outputs: *const TF_Port,
+                         output_values: *mut *mut TF_Tensor,
+                         noutputs: c_int,
+                         targets: *const *const TF_Node,
+                         ntargets: c_int,
+                         run_metadata: *mut TF_Buffer,
+                         status: *mut TF_Status);
+    pub fn TF_SessionPRunSetup(session: *mut TF_SessionWithGraph,
+                               inputs: *const TF_Port,
+                               ninputs: c_int,
+                               outputs: *const TF_Port,
+                               noutputs: c_int,
+                               targets: *const *const TF_Node,
+                               ntargets: c_int,
+                               handle: *mut *const c_char,
+                               status: *mut TF_Status);
+    pub fn TF_SessionPRun(session: *mut TF_SessionWithGraph,
+                          handle: *const c_char,
+                          inputs: *const TF_Port,
+                          input_values: *const *mut TF_Tensor,
+                          ninputs: c_int,
+                          outputs: *const TF_Port,
+                          output_values: *mut *mut TF_Tensor,
+                          noutputs: c_int,
+                          targets: *const *const TF_Node,
+                          ntargets: c_int,
+                          status: *mut TF_Status);
+}
+
+#[derive(Clone, Copy, Debug)]
 pub enum TF_Session {}
 
 extern {
@@ -121,19 +176,38 @@ extern {
                     ncontainers: c_int, status: *mut TF_Status);
     pub fn TF_ExtendGraph(session: *mut TF_Session, proto: *const c_void, length: size_t,
                           status: *mut TF_Status);
-    pub fn TF_Run(session: *mut TF_Session, run_options: *const TF_Buffer,
-                  input_names: *mut *const c_char, inputs: *mut *mut TF_Tensor, ninputs: c_int,
-                  output_names: *mut *const c_char, outputs: *mut *mut TF_Tensor, noutputs: c_int,
-                  target_names: *mut *const c_char, ntargets: c_int, run_metadata: *mut TF_Buffer,
+    pub fn TF_Run(session: *mut TF_Session,
+                  run_options: *const TF_Buffer,
+                  inputs: *mut *const c_char,
+                  input_values: *mut *mut TF_Tensor,
+                  ninputs: c_int,
+                  outputs: *mut *const c_char,
+                  output_values: *mut *mut TF_Tensor,
+                  noutputs: c_int,
+                  targets: *mut *const c_char,
+                  ntargets: c_int,
+                  run_metadata: *mut TF_Buffer,
                   status: *mut TF_Status);
-    pub fn TF_PRunSetup(session: *mut TF_Session, input_names: *mut *const c_char, ninputs: c_int,
-                        output_names: *mut *const c_char, noutputs: c_int,
-                        target_names: *mut *const c_char, ntargets: c_int,
-                        handle: *mut *const c_char, status: *mut TF_Status);
-    pub fn TF_PRun(session: *mut TF_Session, handle: *const c_char,
-                   input_names: *mut *const c_char, inputs: *mut *mut TF_Tensor, ninputs: c_int,
-                   output_names: *mut *const c_char, outputs: *mut *mut TF_Tensor, noutputs: c_int,
-                   target_names: *mut *const c_char, ntargets: c_int, status: *mut TF_Status);
+    pub fn TF_PRunSetup(session: *mut TF_Session,
+                        inputs: *mut *const c_char,
+                        ninputs: c_int,
+                        outputs: *mut *const c_char,
+                        noutputs: c_int,
+                        targets: *mut *const c_char,
+                        ntargets: c_int,
+                        handle: *mut *const c_char,
+                        status: *mut TF_Status);
+    pub fn TF_PRun(session: *mut TF_Session,
+                   handle: *const c_char,
+                   inputs: *mut *const c_char,
+                   input_values: *mut *mut TF_Tensor,
+                   ninputs: c_int,
+                   outputs: *mut *const c_char,
+                   output_values: *mut *mut TF_Tensor,
+                   noutputs: c_int,
+                   targets: *mut *const c_char,
+                   ntargets: c_int,
+                   status: *mut TF_Status);
 }
 
 #[derive(Clone, Copy, Debug)]
