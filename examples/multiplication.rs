@@ -35,8 +35,8 @@ fn main() {
         ffi::TF_ExtendGraph(session, graph.as_ptr() as *const _, graph.len() as size_t, status);
         ok!(status);
 
-        let mut input_names = vec![];
         let mut inputs = vec![];
+        let mut input_values = vec![];
 
         let name = CString::new("a").unwrap();
         let mut data = vec![1f32, 2.0, 3.0];
@@ -45,8 +45,8 @@ fn main() {
                                                 data.as_mut_ptr() as *mut _, data.len() as size_t,
                                                 Some(noop), null_mut()));
 
-        input_names.push(name.as_ptr());
-        inputs.push(tensor);
+        inputs.push(name.as_ptr());
+        input_values.push(tensor);
 
         let name = CString::new("b").unwrap();
         let mut data = vec![4f32, 5.0, 6.0];
@@ -55,26 +55,26 @@ fn main() {
                                                 data.as_mut_ptr() as *mut _, data.len() as size_t,
                                                 Some(noop), null_mut()));
 
-        input_names.push(name.as_ptr());
-        inputs.push(tensor);
+        inputs.push(name.as_ptr());
+        input_values.push(tensor);
 
-        let mut output_names = vec![];
         let mut outputs = vec![];
+        let mut output_values = vec![];
 
         let name = CString::new("c").unwrap();
 
-        output_names.push(name.as_ptr());
-        outputs.push(null_mut());
+        outputs.push(name.as_ptr());
+        output_values.push(null_mut());
 
-        let mut target_names = vec![];
+        let mut targets = vec![];
 
-        ffi::TF_Run(session, null(), input_names.as_mut_ptr(), inputs.as_mut_ptr(),
-                    input_names.len() as c_int, output_names.as_mut_ptr(), outputs.as_mut_ptr(),
-                    output_names.len() as c_int, target_names.as_mut_ptr(),
-                    target_names.len() as c_int, null_mut(), status);
+        ffi::TF_Run(session, null(), inputs.as_mut_ptr(), input_values.as_mut_ptr(),
+                    inputs.len() as c_int, outputs.as_mut_ptr(), output_values.as_mut_ptr(),
+                    outputs.len() as c_int, targets.as_mut_ptr(), targets.len() as c_int,
+                    null_mut(), status);
         ok!(status);
 
-        let tensor = nonnull!(outputs[0]);
+        let tensor = nonnull!(output_values[0]);
         let data = nonnull!(ffi::TF_TensorData(tensor)) as *const f32;
         let data = from_raw_parts(data, ffi::TF_TensorByteSize(tensor) / size_of::<f32>());
 
