@@ -76,8 +76,8 @@ pub struct TF_Buffer {
 }
 
 extern {
-    pub fn TF_NewBufferFromString(proto: *const c_void, proto_length: size_t) -> *mut TF_Buffer;
     pub fn TF_NewBuffer() -> *mut TF_Buffer;
+    pub fn TF_NewBufferFromString(proto: *const c_void, proto_length: size_t) -> *mut TF_Buffer;
     pub fn TF_DeleteBuffer(buffer: *mut TF_Buffer);
     pub fn TF_GetBuffer(buffer: *mut TF_Buffer) -> TF_Buffer;
 }
@@ -103,10 +103,10 @@ pub enum TF_SessionOptions {}
 
 extern {
     pub fn TF_NewSessionOptions() -> *mut TF_SessionOptions;
+    pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
     pub fn TF_SetTarget(options: *mut TF_SessionOptions, target: *const c_char);
     pub fn TF_SetConfig(options: *mut TF_SessionOptions, proto: *const c_void,
                         proto_length: size_t, status: *mut TF_Status);
-    pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -115,20 +115,14 @@ pub enum TF_Graph {}
 extern {
     pub fn TF_NewGraph() -> *mut TF_Graph;
     pub fn TF_DeleteGraph(graph: *mut TF_Graph);
+    pub fn TF_GraphNodeByName(graph: *mut TF_Graph, name: *const c_char) -> *mut TF_Node;
+    pub fn TF_GraphNextNode(graph: *mut TF_Graph, position: *mut size_t) -> *mut TF_Node;
+    pub fn TF_GraphToGraphDef(graph: *mut TF_Graph, definition: *mut TF_Buffer,
+                              status: *mut TF_Status);
 }
 
 #[derive(Clone, Copy, Debug)]
 pub enum TF_NodeDescription {}
-
-#[derive(Clone, Copy, Debug)]
-pub enum TF_Node {}
-
-#[repr(C)]
-#[derive(Clone, Copy, Debug)]
-pub struct TF_Port {
-    pub node: *mut TF_Node,
-    pub index: c_int,
-}
 
 extern {
     pub fn TF_NewNode(graph: *mut TF_Graph, operation_type: *const c_char, name: *const c_char)
@@ -180,6 +174,19 @@ extern {
                                       status: *mut TF_Status);
     pub fn TF_FinishNode(description: *mut TF_NodeDescription, status: *mut TF_Status)
                          -> *mut TF_Node;
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum TF_Node {}
+
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct TF_Port {
+    pub node: *mut TF_Node,
+    pub index: c_int,
+}
+
+extern {
     pub fn TF_NodeName(node: *mut TF_Node) -> *const c_char;
     pub fn TF_NodeOpType(node: *mut TF_Node) -> *const c_char;
     pub fn TF_NodeDevice(node: *mut TF_Node) -> *const c_char;
@@ -196,17 +203,13 @@ extern {
     pub fn TF_NodeOutputConsumers(output: TF_Port, consumers: *mut TF_Port, max_consumers: c_int)
                                   -> c_int;
     pub fn TF_NodeNumControlInputs(node: *mut TF_Node) -> c_int;
-    pub fn TF_NodeGetControlInputs(node: *mut TF_Node, inputs: *mut *mut TF_Node,
-                                   max_inputs: c_int) -> c_int;
+    pub fn TF_NodeGetControlInputs(node: *mut TF_Node, control_inputs: *mut *mut TF_Node,
+                                   max_control_inputs: c_int) -> c_int;
     pub fn TF_NodeNumControlOutputs(node: *mut TF_Node) -> c_int;
-    pub fn TF_NodeGetControlOutputs(node: *mut TF_Node, outputs: *mut *mut TF_Node,
-                                    max_outputs: c_int) -> c_int;
+    pub fn TF_NodeGetControlOutputs(node: *mut TF_Node, control_outputs: *mut *mut TF_Node,
+                                    max_control_outputs: c_int) -> c_int;
     pub fn TF_NodeGetAttrValueProto(node: *mut TF_Node, name: *const c_char, value: *mut TF_Buffer,
                                     status: *mut TF_Status);
-    pub fn TF_GraphNodeByName(graph: *mut TF_Graph, name: *const c_char) -> *mut TF_Node;
-    pub fn TF_GraphNextNode(graph: *mut TF_Graph, position: *mut size_t) -> *mut TF_Node;
-    pub fn TF_GraphToGraphDef(graph: *mut TF_Graph, definition: *mut TF_Buffer,
-                              status: *mut TF_Status);
     pub fn TF_NodeToNodeDef(node: *mut TF_Node, definition: *mut TF_Buffer,
                             status: *mut TF_Status);
 }
