@@ -1,10 +1,8 @@
 [package]
 name = "tensorflux-sys"
-version = "0.1.1"
+version = "0.2.0"
 license = "Apache-2.0/MIT"
-authors = [
-  "Ivan Ukhov <ivan.ukhov@gmail.com>",
-]
+authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 description = "The package provides bindings to TensorFlow."
 documentation = "https://stainless-steel.github.io/tensorflux-sys"
 homepage = "https://github.com/stainless-steel/tensorflux-sys"
