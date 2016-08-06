@@ -3,13 +3,21 @@ use libc::{c_char, c_int, c_void, size_t};
 use {TF_Buffer, TF_Graph, TF_Node, TF_Port, TF_Status, TF_Tensor};
 
 #[derive(Clone, Copy, Debug)]
-pub enum TF_Session {}
-
-#[derive(Clone, Copy, Debug)]
 pub enum TF_SessionOptions {}
 
 #[derive(Clone, Copy, Debug)]
+pub enum TF_Session {}
+
+#[derive(Clone, Copy, Debug)]
 pub enum TF_SessionWithGraph {}
+
+extern {
+    pub fn TF_NewSessionOptions() -> *mut TF_SessionOptions;
+    pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
+    pub fn TF_SetTarget(options: *mut TF_SessionOptions, target: *const c_char);
+    pub fn TF_SetConfig(options: *mut TF_SessionOptions, proto: *const c_void,
+                        proto_length: size_t, status: *mut TF_Status);
+}
 
 extern {
     pub fn TF_NewSession(options: *const TF_SessionOptions, status: *mut TF_Status)
@@ -52,14 +60,6 @@ extern {
                    targets: *mut *const c_char,
                    ntargets: c_int,
                    status: *mut TF_Status);
-}
-
-extern {
-    pub fn TF_NewSessionOptions() -> *mut TF_SessionOptions;
-    pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
-    pub fn TF_SetTarget(options: *mut TF_SessionOptions, target: *const c_char);
-    pub fn TF_SetConfig(options: *mut TF_SessionOptions, proto: *const c_void,
-                        proto_length: size_t, status: *mut TF_Status);
 }
 
 extern {

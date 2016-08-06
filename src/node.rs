@@ -3,10 +3,10 @@ use libc::{c_char, c_float, c_int, c_uchar, c_void, int64_t, size_t};
 use {TF_Buffer, TF_DataType, TF_Graph, TF_Status, TF_Tensor};
 
 #[derive(Clone, Copy, Debug)]
-pub enum TF_Node {}
+pub enum TF_NodeDescription {}
 
 #[derive(Clone, Copy, Debug)]
-pub enum TF_NodeDescription {}
+pub enum TF_Node {}
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
