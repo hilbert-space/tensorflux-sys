@@ -117,6 +117,8 @@ extern {
                          -> *mut TF_Session;
     pub fn TF_CloseSession(session: *mut TF_Session, status: *mut TF_Status);
     pub fn TF_DeleteSession(session: *mut TF_Session, status: *mut TF_Status);
+    pub fn TF_Reset(options: *const TF_SessionOptions, containers: *mut *const c_char,
+                    ncontainers: c_int, status: *mut TF_Status);
     pub fn TF_ExtendGraph(session: *mut TF_Session, proto: *const c_void, length: size_t,
                           status: *mut TF_Status);
     pub fn TF_Run(session: *mut TF_Session, run_options: *const TF_Buffer,
