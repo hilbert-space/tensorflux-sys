@@ -38,21 +38,21 @@ unsafe fn compute() {
 
     let graph = nonnull!(ffi::TF_NewGraph());
 
-    let description = nonnull!(ffi::TF_NewNode(graph, cstr!("Placeholder"), cstr!("a")));
+    let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Placeholder"), cstr!("a")));
     ffi::TF_SetAttrType(description, cstr!("dtype"), ffi::TF_FLOAT);
-    let a = ok!(ffi::TF_FinishNode(description, status));
-    let a = ffi::TF_Port { node: a, index: 0 };
+    let a = ok!(ffi::TF_FinishOperation(description, status));
+    let a = ffi::TF_Port { oper: a, index: 0 };
 
-    let description = nonnull!(ffi::TF_NewNode(graph, cstr!("Placeholder"), cstr!("b")));
+    let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Placeholder"), cstr!("b")));
     ffi::TF_SetAttrType(description, cstr!("dtype"), ffi::TF_FLOAT);
-    let b = ok!(ffi::TF_FinishNode(description, status));
-    let b = ffi::TF_Port { node: b, index: 0 };
+    let b = ok!(ffi::TF_FinishOperation(description, status));
+    let b = ffi::TF_Port { oper: b, index: 0 };
 
-    let description = nonnull!(ffi::TF_NewNode(graph, cstr!("Mul"), cstr!("c")));
+    let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Mul"), cstr!("c")));
     ffi::TF_AddInput(description, a);
     ffi::TF_AddInput(description, b);
-    let c = ok!(ffi::TF_FinishNode(description, status));
-    let c = ffi::TF_Port { node: c, index: 0 };
+    let c = ok!(ffi::TF_FinishOperation(description, status));
+    let c = ffi::TF_Port { oper: c, index: 0 };
 
     let mut inputs = vec![];
     let mut input_values = vec![];

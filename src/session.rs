@@ -1,6 +1,6 @@
 use libc::{c_char, c_int, c_void, size_t};
 
-use {TF_Buffer, TF_Graph, TF_Node, TF_Port, TF_Status, TF_Tensor};
+use {TF_Buffer, TF_Graph, TF_Operation, TF_Port, TF_Status, TF_Tensor};
 
 #[derive(Clone, Copy, Debug)]
 pub enum TF_SessionOptions {}
@@ -75,7 +75,7 @@ extern {
                          outputs: *const TF_Port,
                          output_values: *mut *mut TF_Tensor,
                          noutputs: c_int,
-                         targets: *const *const TF_Node,
+                         targets: *const *const TF_Operation,
                          ntargets: c_int,
                          run_metadata: *mut TF_Buffer,
                          status: *mut TF_Status);
@@ -84,7 +84,7 @@ extern {
                                ninputs: c_int,
                                outputs: *const TF_Port,
                                noutputs: c_int,
-                               targets: *const *const TF_Node,
+                               targets: *const *const TF_Operation,
                                ntargets: c_int,
                                handle: *mut *const c_char,
                                status: *mut TF_Status);
@@ -96,7 +96,7 @@ extern {
                           outputs: *const TF_Port,
                           output_values: *mut *mut TF_Tensor,
                           noutputs: c_int,
-                          targets: *const *const TF_Node,
+                          targets: *const *const TF_Operation,
                           ntargets: c_int,
                           status: *mut TF_Status);
 }

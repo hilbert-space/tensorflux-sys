@@ -7,7 +7,7 @@ use std::{env, fs};
 const LIBRARY: &'static str = "tensorflow";
 const REPOSITORY: &'static str = "https://github.com/tensorflow/tensorflow.git";
 const TARGET: &'static str = "libtensorflow.so";
-const VERSION: &'static str = "0.10.0rc0";
+const VERSION: &'static str = "0.10";
 
 macro_rules! get(($name:expr) => (ok!(env::var($name))));
 macro_rules! ok(($expression:expr) => ($expression.unwrap()));
@@ -22,7 +22,7 @@ fn main() {
         let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("target/source");
         if !Path::new(&source.join(".git")).exists() {
             run("git", |command| command.arg("clone")
-                                        .arg(format!("--branch=v{}", VERSION))
+                                        .arg(format!("--branch=r{}", VERSION))
                                         .arg("--recursive")
                                         .arg(REPOSITORY)
                                         .arg(&source));
