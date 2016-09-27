@@ -21,6 +21,12 @@ pub struct TF_Port {
 extern {
     pub fn TF_NewGraph() -> *mut TF_Graph;
     pub fn TF_DeleteGraph(graph: *mut TF_Graph);
+    pub fn TF_GraphSetTensorShape(graph: *mut TF_Graph, port: TF_Port, dims: *const int64_t,
+                                  ndims: c_int, status: *mut TF_Status);
+    pub fn TF_GraphGetTensorNumDims(graph: *mut TF_Graph, port: TF_Port, status: *mut TF_Status)
+                                    -> c_int;
+    pub fn TF_GraphGetTensorShape(graph: *mut TF_Graph, port: TF_Port, dims: *mut int64_t,
+                                  ndims: c_int, status: *mut TF_Status);
     pub fn TF_GraphOperationByName(graph: *mut TF_Graph, name: *const c_char) -> *mut TF_Operation;
     pub fn TF_GraphNextOperation(graph: *mut TF_Graph, position: *mut size_t) -> *mut TF_Operation;
     pub fn TF_GraphToGraphDef(graph: *mut TF_Graph, definition: *mut TF_Buffer,
