@@ -9,7 +9,7 @@ install:
   - curl -LO https://stainless-steel.github.io/travis/bazel.sh && source bazel.sh
 
 script:
-  - cargo test -vv -j 1
+  - cargo test -vv
   - cargo run --example=multiplication
 
 after_success:
