@@ -1,5 +1,5 @@
 language: rust
-sudo: false
+sudo: required
 
 cache: cargo
 rust: nightly
@@ -9,7 +9,6 @@ install:
   - curl -LO https://stainless-steel.github.io/travis/bazel.sh && source bazel.sh
 
 script:
-  - export BAZEL_FLAGS="--local_resources=512,0.5,1.0"
   - cargo test -vv -j 1
   - cargo run --example=multiplication
 
