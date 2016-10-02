@@ -42,6 +42,16 @@ pub struct TF_AttrMetadata {
     pub total_size: int64_t,
 }
 
+#[derive(Clone, Copy, Debug)]
+pub enum TF_ImportGraphDefOptions {}
+
+extern {
+    pub fn TF_NewImportGraphDefOptions() -> *mut TF_ImportGraphDefOptions;
+    pub fn TF_DeleteImportGraphDefOptions(options: *mut TF_ImportGraphDefOptions);
+    pub fn TF_ImportGraphDefOptionsSetPrefix(options: *mut TF_ImportGraphDefOptions,
+                                             prefix: *const c_char);
+}
+
 extern {
     pub fn TF_NewGraph() -> *mut TF_Graph;
     pub fn TF_DeleteGraph(graph: *mut TF_Graph);
@@ -55,6 +65,9 @@ extern {
     pub fn TF_GraphNextOperation(graph: *mut TF_Graph, position: *mut size_t) -> *mut TF_Operation;
     pub fn TF_GraphToGraphDef(graph: *mut TF_Graph, definition: *mut TF_Buffer,
                               status: *mut TF_Status);
+    pub fn TF_GraphImportGraphDef(graph: *mut TF_Graph, definition: *const TF_Buffer,
+                                  options: *const TF_ImportGraphDefOptions,
+                                  status: *mut TF_Status);
 }
 
 extern {
