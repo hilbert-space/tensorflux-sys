@@ -29,12 +29,19 @@ pub use TF_DataType::*;
 pub enum TF_Tensor {}
 
 extern {
-    pub fn TF_NewTensor(data_type: TF_DataType, dims: *const int64_t, num_dims: c_int,
-                        data: *mut c_void, length: size_t,
+    pub fn TF_NewTensor(data_type: TF_DataType,
+                        dims: *const int64_t,
+                        num_dims: c_int,
+                        data: *mut c_void,
+                        length: size_t,
                         deallocator: Option<unsafe extern fn(*mut c_void, size_t, *mut c_void)>,
-                        deallocator_argument: *mut c_void) -> *mut TF_Tensor;
-    pub fn TF_AllocateTensor(data_type: TF_DataType, dims: *const int64_t, num_dims: c_int,
-                             length: size_t) -> *mut TF_Tensor;
+                        deallocator_argument: *mut c_void)
+                        -> *mut TF_Tensor;
+    pub fn TF_AllocateTensor(data_type: TF_DataType,
+                             dims: *const int64_t,
+                             num_dims: c_int,
+                             length: size_t)
+                             -> *mut TF_Tensor;
     pub fn TF_DeleteTensor(tensor: *mut TF_Tensor);
     pub fn TF_TensorType(tensor: *const TF_Tensor) -> TF_DataType;
     pub fn TF_NumDims(tensor: *const TF_Tensor) -> c_int;

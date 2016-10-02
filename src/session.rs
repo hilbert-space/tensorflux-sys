@@ -12,13 +12,18 @@ pub enum TF_SessionOptions {}
 pub enum TF_SessionWithGraph {}
 
 extern {
-    pub fn TF_NewSession(options: *const TF_SessionOptions, status: *mut TF_Status)
+    pub fn TF_NewSession(options: *const TF_SessionOptions,
+                         status: *mut TF_Status)
                          -> *mut TF_Session;
     pub fn TF_CloseSession(session: *mut TF_Session, status: *mut TF_Status);
     pub fn TF_DeleteSession(session: *mut TF_Session, status: *mut TF_Status);
-    pub fn TF_Reset(options: *const TF_SessionOptions, containers: *mut *const c_char,
-                    num_containers: c_int, status: *mut TF_Status);
-    pub fn TF_ExtendGraph(session: *mut TF_Session, proto: *const c_void, proto_length: size_t,
+    pub fn TF_Reset(options: *const TF_SessionOptions,
+                    containers: *mut *const c_char,
+                    num_containers: c_int,
+                    status: *mut TF_Status);
+    pub fn TF_ExtendGraph(session: *mut TF_Session,
+                          proto: *const c_void,
+                          proto_length: size_t,
                           status: *mut TF_Status);
     pub fn TF_Run(session: *mut TF_Session,
                   run_options: *const TF_Buffer,
@@ -58,13 +63,17 @@ extern {
     pub fn TF_NewSessionOptions() -> *mut TF_SessionOptions;
     pub fn TF_DeleteSessionOptions(options: *mut TF_SessionOptions);
     pub fn TF_SetTarget(options: *mut TF_SessionOptions, target: *const c_char);
-    pub fn TF_SetConfig(options: *mut TF_SessionOptions, proto: *const c_void,
-                        proto_length: size_t, status: *mut TF_Status);
+    pub fn TF_SetConfig(options: *mut TF_SessionOptions,
+                        proto: *const c_void,
+                        proto_length: size_t,
+                        status: *mut TF_Status);
 }
 
 extern {
-    pub fn TF_NewSessionWithGraph(graph: *mut TF_Graph, options: *const TF_SessionOptions,
-                                  status: *mut TF_Status) -> *mut TF_SessionWithGraph;
+    pub fn TF_NewSessionWithGraph(graph: *mut TF_Graph,
+                                  options: *const TF_SessionOptions,
+                                  status: *mut TF_Status)
+                                  -> *mut TF_SessionWithGraph;
     pub fn TF_CloseSessionWithGraph(session: *mut TF_SessionWithGraph, status: *mut TF_Status);
     pub fn TF_DeleteSessionWithGraph(session: *mut TF_SessionWithGraph, status: *mut TF_Status);
     pub fn TF_SessionRun(session: *mut TF_SessionWithGraph,
