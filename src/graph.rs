@@ -46,11 +46,11 @@ extern {
     pub fn TF_NewGraph() -> *mut TF_Graph;
     pub fn TF_DeleteGraph(graph: *mut TF_Graph);
     pub fn TF_GraphSetTensorShape(graph: *mut TF_Graph, port: TF_Port, dims: *const int64_t,
-                                  ndims: c_int, status: *mut TF_Status);
+                                  num_dims: c_int, status: *mut TF_Status);
     pub fn TF_GraphGetTensorNumDims(graph: *mut TF_Graph, port: TF_Port, status: *mut TF_Status)
                                     -> c_int;
     pub fn TF_GraphGetTensorShape(graph: *mut TF_Graph, port: TF_Port, dims: *mut int64_t,
-                                  ndims: c_int, status: *mut TF_Status);
+                                  num_dims: c_int, status: *mut TF_Status);
     pub fn TF_GraphOperationByName(graph: *mut TF_Graph, name: *const c_char) -> *mut TF_Operation;
     pub fn TF_GraphNextOperation(graph: *mut TF_Graph, position: *mut size_t) -> *mut TF_Operation;
     pub fn TF_GraphToGraphDef(graph: *mut TF_Graph, definition: *mut TF_Buffer,
@@ -63,7 +63,7 @@ extern {
     pub fn TF_SetDevice(description: *mut TF_OperationDescription, device: *const c_char);
     pub fn TF_AddInput(description: *mut TF_OperationDescription, input: TF_Port);
     pub fn TF_AddInputList(description: *mut TF_OperationDescription, inputs: *const TF_Port,
-                           ninputs: c_int);
+                           num_inputs: c_int);
     pub fn TF_AddControlInput(description: *mut TF_OperationDescription,
                               operation: *mut TF_Operation);
     pub fn TF_ColocateWith(description: *mut TF_OperationDescription,
@@ -72,38 +72,39 @@ extern {
                             value: *const c_void, length: c_int);
     pub fn TF_SetAttrStringList(description: *mut TF_OperationDescription, name: *const c_char,
                                 values: *const *const c_void, lengths: *const c_int,
-                                nvalues: c_int);
+                                num_values: c_int);
     pub fn TF_SetAttrInt(description: *mut TF_OperationDescription, name: *const c_char,
                          value: int64_t);
     pub fn TF_SetAttrIntList(description: *mut TF_OperationDescription, name: *const c_char,
-                             values: *const int64_t, nvalues: c_int);
+                             values: *const int64_t, num_values: c_int);
     pub fn TF_SetAttrFloat(description: *mut TF_OperationDescription, name: *const c_char,
                            value: c_float);
     pub fn TF_SetAttrFloatList(description: *mut TF_OperationDescription, name: *const c_char,
-                               values: *const c_float, nvalues: c_int);
+                               values: *const c_float, num_values: c_int);
     pub fn TF_SetAttrBool(description: *mut TF_OperationDescription, name: *const c_char,
                           value: c_uchar);
     pub fn TF_SetAttrBoolList(description: *mut TF_OperationDescription, name: *const c_char,
-                              values: *const c_uchar, nvalues: c_int);
+                              values: *const c_uchar, num_values: c_int);
     pub fn TF_SetAttrType(description: *mut TF_OperationDescription, name: *const c_char,
                           value: TF_DataType);
     pub fn TF_SetAttrTypeList(description: *mut TF_OperationDescription, name: *const c_char,
-                              values: *const TF_DataType, nvalues: c_int);
+                              values: *const TF_DataType, num_values: c_int);
     pub fn TF_SetAttrShape(description: *mut TF_OperationDescription, name: *const c_char,
-                           dims: *const int64_t, ndims: c_int);
+                           dims: *const int64_t, num_dims: c_int);
     pub fn TF_SetAttrShapeList(description: *mut TF_OperationDescription, name: *const c_char,
-                               dims: *const *const int64_t, ndims: *const c_int, nshapes: c_int);
+                               dims: *const *const int64_t, num_dims: *const c_int,
+                               num_shapes: c_int);
     pub fn TF_SetAttrTensorShapeProto(description: *mut TF_OperationDescription,
                                       name: *const c_char, proto: *const c_void,
                                       proto_length: c_int, status: *mut TF_Status);
     pub fn TF_SetAttrTensorShapeProtoList(description: *mut TF_OperationDescription,
                                           name: *const c_char, protos: *const *const c_void,
-                                          proto_lengths: *const c_int, nshapes: c_int,
+                                          proto_lengths: *const c_int, num_shapes: c_int,
                                           status: *mut TF_Status);
     pub fn TF_SetAttrTensor(description: *mut TF_OperationDescription, name: *const c_char,
                             value: *mut TF_Tensor, status: *mut TF_Status);
     pub fn TF_SetAttrTensorList(description: *mut TF_OperationDescription, name: *const c_char,
-                                values: *const *mut TF_Tensor, nvalues: c_int,
+                                values: *const *mut TF_Tensor, num_values: c_int,
                                 status: *mut TF_Status);
     pub fn TF_SetAttrValueProto(description: *mut TF_OperationDescription,
                                 name: *const c_char, proto: *const c_void,
