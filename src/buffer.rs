@@ -5,7 +5,7 @@ use libc::{c_void, size_t};
 pub struct TF_Buffer {
     pub data: *const c_void,
     pub length: size_t,
-    pub data_deallocator: Option<unsafe extern fn(*mut c_void, size_t)>,
+    pub deallocator: Option<unsafe extern fn(*mut c_void, size_t)>,
 }
 
 extern {
