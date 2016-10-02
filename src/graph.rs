@@ -20,7 +20,7 @@ pub struct TF_Port {
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum TF_Attr_Type {
+pub enum TF_AttrType {
     TF_ATTR_STRING = 0,
     TF_ATTR_INT = 1,
     TF_ATTR_FLOAT = 2,
@@ -31,14 +31,14 @@ pub enum TF_Attr_Type {
     TF_ATTR_PLACEHOLDER = 7,
     TF_ATTR_FUNC = 8,
 }
-pub use TF_Attr_Type::*;
+pub use TF_AttrType::*;
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
-pub struct TF_Attr_Metadata {
+pub struct TF_AttrMetadata {
     pub is_list: c_uchar,
     pub list_size: int64_t,
-    pub type_: TF_Attr_Type,
+    pub type_: TF_AttrType,
     pub total_size: int64_t,
 }
 
@@ -138,7 +138,7 @@ extern {
                                          control_outputs: *mut *mut TF_Operation,
                                          max_control_outputs: c_int) -> c_int;
     pub fn TF_OperationGetAttrMetadata(operation: *mut TF_Operation, name: *const c_char,
-                                       status: *mut TF_Status) -> TF_Attr_Metadata;
+                                       status: *mut TF_Status) -> TF_AttrMetadata;
     pub fn TF_OperationGetAttrString(operation: *mut TF_Operation, name: *const c_char,
                                      value: *mut c_void, max_length: c_int,
                                      status: *mut TF_Status);
