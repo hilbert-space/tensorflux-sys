@@ -14,7 +14,7 @@ pub enum TF_Operation {}
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
 pub struct TF_Port {
-    pub oper: *mut TF_Operation,
+    pub operation: *mut TF_Operation,
     pub index: c_int,
 }
 

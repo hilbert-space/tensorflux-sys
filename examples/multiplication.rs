@@ -41,18 +41,18 @@ unsafe fn compute() {
     let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Placeholder"), cstr!("a")));
     ffi::TF_SetAttrType(description, cstr!("dtype"), ffi::TF_FLOAT);
     let a = ok!(ffi::TF_FinishOperation(description, status));
-    let a = ffi::TF_Port { oper: a, index: 0 };
+    let a = ffi::TF_Port { operation: a, index: 0 };
 
     let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Placeholder"), cstr!("b")));
     ffi::TF_SetAttrType(description, cstr!("dtype"), ffi::TF_FLOAT);
     let b = ok!(ffi::TF_FinishOperation(description, status));
-    let b = ffi::TF_Port { oper: b, index: 0 };
+    let b = ffi::TF_Port { operation: b, index: 0 };
 
     let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Mul"), cstr!("c")));
     ffi::TF_AddInput(description, a);
     ffi::TF_AddInput(description, b);
     let c = ok!(ffi::TF_FinishOperation(description, status));
-    let c = ffi::TF_Port { oper: c, index: 0 };
+    let c = ffi::TF_Port { operation: c, index: 0 };
 
     let mut inputs = vec![];
     let mut input_values = vec![];
