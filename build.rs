@@ -30,26 +30,14 @@ fn main() {
         run("./configure", |command| command.current_dir(&source));
         run("bazel", |command| command.current_dir(&source)
                                       .arg("build")
-                                      .args(&collect_build_flags())
+                                      .arg(format!("--jobs={}", get!("NUM_JOBS")))
+                                      .arg("--compilation_mode=opt")
                                       .arg(format!("{}:{}", LIBRARY, TARGET)));
         ok!(fs::copy(source.join("bazel-bin").join(LIBRARY).join(TARGET), output.join(TARGET)));
     }
 
     println!("cargo:rustc-link-lib=dylib={}", LIBRARY);
     println!("cargo:rustc-link-search={}", output.display());
-}
-
-fn collect_build_flags() -> Vec<String> {
-    let mut flags = vec![
-        "--compilation_mode=opt".to_string(),
-        format!("--jobs={}", get!("NUM_JOBS")),
-    ];
-    for flag in env::var("BAZEL_FLAGS").unwrap_or(String::new()).split(' ') {
-        if !flag.is_empty() {
-            flags.push(flag.to_string());
-        }
-    }
-    flags
 }
 
 fn run<F>(name: &str, mut configure: F) where F: FnMut(&mut Command) -> &mut Command {
