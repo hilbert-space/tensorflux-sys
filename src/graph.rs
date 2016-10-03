@@ -22,7 +22,7 @@ pub use TF_AttrType::*;
 pub struct TF_AttrMetadata {
     pub is_list: c_uchar,
     pub list_size: int64_t,
-    pub type_: TF_AttrType,
+    pub kind: TF_AttrType,
     pub total_size: int64_t,
 }
 
