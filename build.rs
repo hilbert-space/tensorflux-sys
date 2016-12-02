@@ -29,9 +29,9 @@ fn main() {
                                         .arg(&source));
         }
         let yes = ok!(Command::new("yes").arg("").stdout(Stdio::piped()).spawn());
-        run("./configure", { |command|
-            command.current_dir(&source)
-                   .stdin(unsafe { Stdio::from_raw_fd(ok!(yes.stdout.as_ref()).as_raw_fd()) })
+        run("./configure", |command| {
+            let yes = unsafe { Stdio::from_raw_fd(ok!(yes.stdout.as_ref()).as_raw_fd()) };
+            command.current_dir(&source).stdin(yes)
         });
         run("bazel", |command| command.current_dir(&source)
                                       .arg("build")
