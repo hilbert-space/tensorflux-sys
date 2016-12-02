@@ -1,8 +1,9 @@
 extern crate pkg_config;
 
-use std::path::{Path, PathBuf};
-use std::process::Command;
 use std::{env, fs};
+use std::os::unix::io::{AsRawFd, FromRawFd};
+use std::path::{Path, PathBuf};
+use std::process::{Command, Stdio};
 
 const LIBRARY: &'static str = "tensorflow";
 const REPOSITORY: &'static str = "https://github.com/tensorflow/tensorflow.git";
@@ -27,7 +28,11 @@ fn main() {
                                         .arg(REPOSITORY)
                                         .arg(&source));
         }
-        run("./configure", |command| command.current_dir(&source));
+        let yes = ok!(Command::new("yes").arg("").stdout(Stdio::piped()).spawn());
+        run("./configure", { |command|
+            command.current_dir(&source)
+                   .stdin(unsafe { Stdio::from_raw_fd(ok!(yes.stdout.as_ref()).as_raw_fd()) })
+        });
         run("bazel", |command| command.current_dir(&source)
                                       .arg("build")
                                       .arg(format!("--jobs={}", get!("NUM_JOBS")))
