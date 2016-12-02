@@ -41,18 +41,18 @@ unsafe fn compute() {
     let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Placeholder"), cstr!("a")));
     ffi::TF_SetAttrType(description, cstr!("dtype"), ffi::TF_FLOAT);
     let a = ok!(ffi::TF_FinishOperation(description, status));
-    let a = ffi::TF_Port { operation: a, index: 0 };
+    let a = ffi::TF_Output { operation: a, index: 0 };
 
     let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Placeholder"), cstr!("b")));
     ffi::TF_SetAttrType(description, cstr!("dtype"), ffi::TF_FLOAT);
     let b = ok!(ffi::TF_FinishOperation(description, status));
-    let b = ffi::TF_Port { operation: b, index: 0 };
+    let b = ffi::TF_Output { operation: b, index: 0 };
 
     let description = nonnull!(ffi::TF_NewOperation(graph, cstr!("Mul"), cstr!("c")));
     ffi::TF_AddInput(description, a);
     ffi::TF_AddInput(description, b);
     let c = ok!(ffi::TF_FinishOperation(description, status));
-    let c = ffi::TF_Port { operation: c, index: 0 };
+    let c = ffi::TF_Output { operation: c, index: 0 };
 
     let mut inputs = vec![];
     let mut input_values = vec![];
@@ -84,7 +84,7 @@ unsafe fn compute() {
     let targets = vec![];
 
     let options = nonnull!(ffi::TF_NewSessionOptions());
-    let session = ok!(ffi::TF_NewSessionWithGraph(graph, options, status));
+    let session = ok!(ffi::TF_NewSession(graph, options, status));
 
     ok!(ffi::TF_SessionRun(session, null(), inputs.as_ptr(), input_values.as_ptr(),
                            inputs.len() as c_int, outputs.as_ptr(), output_values.as_mut_ptr(),
@@ -97,8 +97,8 @@ unsafe fn compute() {
 
     assert_eq!(data, &[1.0 * 4.0, 2.0 * 5.0, 3.0 * 6.0]);
 
-    ok!(ffi::TF_CloseSessionWithGraph(session, status));
-    ok!(ffi::TF_DeleteSessionWithGraph(session, status));
+    ok!(ffi::TF_CloseSession(session, status));
+    ok!(ffi::TF_DeleteSession(session, status));
     ffi::TF_DeleteTensor(tensor);
     ffi::TF_DeleteStatus(status);
     ffi::TF_DeleteSessionOptions(options);

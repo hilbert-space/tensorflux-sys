@@ -40,7 +40,14 @@ pub enum TF_OperationDescription {}
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
-pub struct TF_Port {
+pub struct TF_Input {
+    pub operation: *mut TF_Operation,
+    pub index: c_int,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct TF_Output {
     pub operation: *mut TF_Operation,
     pub index: c_int,
 }
@@ -49,16 +56,16 @@ extern {
     pub fn TF_NewGraph() -> *mut TF_Graph;
     pub fn TF_DeleteGraph(graph: *mut TF_Graph);
     pub fn TF_GraphSetTensorShape(graph: *mut TF_Graph,
-                                  port: TF_Port,
+                                  output: TF_Output,
                                   dims: *const int64_t,
                                   num_dims: c_int,
                                   status: *mut TF_Status);
     pub fn TF_GraphGetTensorNumDims(graph: *mut TF_Graph,
-                                    port: TF_Port,
+                                    output: TF_Output,
                                     status: *mut TF_Status)
                                     -> c_int;
     pub fn TF_GraphGetTensorShape(graph: *mut TF_Graph,
-                                  port: TF_Port,
+                                  output: TF_Output,
                                   dims: *mut int64_t,
                                   num_dims: c_int,
                                   status: *mut TF_Status);
@@ -85,21 +92,21 @@ extern {
     pub fn TF_OperationOpType(operation: *mut TF_Operation) -> *const c_char;
     pub fn TF_OperationDevice(operation: *mut TF_Operation) -> *const c_char;
     pub fn TF_OperationNumOutputs(operation: *mut TF_Operation) -> c_int;
-    pub fn TF_OperationOutputType(output: TF_Port) -> TF_DataType;
+    pub fn TF_OperationOutputType(output: TF_Output) -> TF_DataType;
     pub fn TF_OperationOutputListLength(operation: *mut TF_Operation,
                                         name: *const c_char,
                                         status: *mut TF_Status)
                                         -> c_int;
     pub fn TF_OperationNumInputs(operation: *mut TF_Operation) -> c_int;
-    pub fn TF_OperationInputType(input: TF_Port) -> TF_DataType;
+    pub fn TF_OperationInputType(input: TF_Input) -> TF_DataType;
     pub fn TF_OperationInputListLength(operation: *mut TF_Operation,
                                        name: *const c_char,
                                        status: *mut TF_Status)
                                        -> c_int;
-    pub fn TF_OperationInput(input: TF_Port) -> TF_Port;
-    pub fn TF_OperationOutputNumConsumers(output: TF_Port) -> c_int;
-    pub fn TF_OperationOutputConsumers(output: TF_Port,
-                                       consumers: *mut TF_Port,
+    pub fn TF_OperationInput(input: TF_Input) -> TF_Output;
+    pub fn TF_OperationOutputNumConsumers(output: TF_Output) -> c_int;
+    pub fn TF_OperationOutputConsumers(output: TF_Output,
+                                       consumers: *mut TF_Input,
                                        max_consumers: c_int)
                                        -> c_int;
     pub fn TF_OperationNumControlInputs(operation: *mut TF_Operation) -> c_int;
@@ -119,12 +126,12 @@ extern {
     pub fn TF_OperationGetAttrString(operation: *mut TF_Operation,
                                      name: *const c_char,
                                      value: *mut c_void,
-                                     max_length: c_int,
+                                     max_length: size_t,
                                      status: *mut TF_Status);
     pub fn TF_OperationGetAttrStringList(operation: *mut TF_Operation,
                                          name: *const c_char,
                                          values: *mut *mut c_void,
-                                         lengths: *mut c_int,
+                                         lengths: *mut size_t,
                                          max_values: c_int,
                                          storage: *mut c_void,
                                          storage_size: size_t,
@@ -211,9 +218,9 @@ extern {
                            name: *const c_char)
                            -> *mut TF_OperationDescription;
     pub fn TF_SetDevice(description: *mut TF_OperationDescription, device: *const c_char);
-    pub fn TF_AddInput(description: *mut TF_OperationDescription, input: TF_Port);
+    pub fn TF_AddInput(description: *mut TF_OperationDescription, input: TF_Output);
     pub fn TF_AddInputList(description: *mut TF_OperationDescription,
-                           inputs: *const TF_Port,
+                           inputs: *const TF_Output,
                            num_inputs: c_int);
     pub fn TF_AddControlInput(description: *mut TF_OperationDescription,
                               operation: *mut TF_Operation);
@@ -268,12 +275,12 @@ extern {
     pub fn TF_SetAttrTensorShapeProto(description: *mut TF_OperationDescription,
                                       name: *const c_char,
                                       proto: *const c_void,
-                                      proto_length: c_int,
+                                      proto_length: size_t,
                                       status: *mut TF_Status);
     pub fn TF_SetAttrTensorShapeProtoList(description: *mut TF_OperationDescription,
                                           name: *const c_char,
                                           protos: *const *const c_void,
-                                          proto_lengths: *const c_int,
+                                          proto_lengths: *const size_t,
                                           num_shapes: c_int,
                                           status: *mut TF_Status);
     pub fn TF_SetAttrTensor(description: *mut TF_OperationDescription,
