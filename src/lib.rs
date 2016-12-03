@@ -7,7 +7,6 @@
 extern crate libc;
 
 mod buffer;
-mod common;
 mod graph;
 mod library;
 mod session;
@@ -16,10 +15,15 @@ mod string;
 mod tensor;
 
 pub use buffer::*;
-pub use common::*;
 pub use graph::*;
 pub use library::*;
 pub use session::*;
 pub use status::*;
 pub use string::*;
 pub use tensor::*;
+
+use libc::c_char;
+
+extern {
+    pub fn TF_Version() -> *const c_char;
+}
