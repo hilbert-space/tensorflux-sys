@@ -3,6 +3,15 @@ use libc::{c_char, c_float, c_int, c_uchar, c_void, int64_t, size_t};
 use {TF_Buffer, TF_DataType, TF_Status, TF_Tensor};
 
 #[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct TF_AttrMetadata {
+    pub is_list: c_uchar,
+    pub list_size: int64_t,
+    pub kind: TF_AttrType,
+    pub total_size: int64_t,
+}
+
+#[repr(C)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TF_AttrType {
     TF_ATTR_STRING = 0,
@@ -16,15 +25,6 @@ pub enum TF_AttrType {
     TF_ATTR_FUNC = 8,
 }
 pub use TF_AttrType::*;
-
-#[repr(C)]
-#[derive(Clone, Copy, Debug)]
-pub struct TF_AttrMetadata {
-    pub is_list: c_uchar,
-    pub list_size: int64_t,
-    pub kind: TF_AttrType,
-    pub total_size: int64_t,
-}
 
 #[derive(Clone, Copy, Debug)]
 pub enum TF_Graph {}
@@ -40,14 +40,14 @@ pub enum TF_OperationDescription {}
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
-pub struct TF_Input {
+pub struct TF_Output {
     pub operation: *mut TF_Operation,
     pub index: c_int,
 }
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
-pub struct TF_Output {
+pub struct TF_Input {
     pub operation: *mut TF_Operation,
     pub index: c_int,
 }
