@@ -1,7 +1,8 @@
 extern crate pkg_config;
 
 use std::{env, fs};
-use std::os::unix::io::{AsRawFd, FromRawFd};
+use std::ffi::OsStr;
+use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
@@ -17,7 +18,6 @@ fn main() {
     if pkg_config::find_library(LIBRARY).is_ok() {
         return;
     }
-
     let output = PathBuf::from(&get!("OUT_DIR"));
     if !output.join(TARGET).exists() {
         let source = PathBuf::from(&get!("CARGO_MANIFEST_DIR")).join("target/source");
@@ -28,11 +28,7 @@ fn main() {
                                         .arg(REPOSITORY)
                                         .arg(&source));
         }
-        let yes = ok!(Command::new("yes").arg("").stdout(Stdio::piped()).spawn());
-        run("./configure", |command| {
-            let yes = unsafe { Stdio::from_raw_fd(ok!(yes.stdout.as_ref()).as_raw_fd()) };
-            command.current_dir(&source).stdin(yes)
-        });
+        run_default(source.join("configure"), |command| command.current_dir(&source));
         run("bazel", |command| command.current_dir(&source)
                                       .arg("build")
                                       .arg(format!("--jobs={}", get!("NUM_JOBS")))
@@ -40,14 +36,35 @@ fn main() {
                                       .arg(format!("{}:{}", LIBRARY, TARGET)));
         ok!(fs::copy(source.join("bazel-bin").join(LIBRARY).join(TARGET), output.join(TARGET)));
     }
-
     println!("cargo:rustc-link-lib=dylib={}", LIBRARY);
     println!("cargo:rustc-link-search={}", output.display());
 }
 
-fn run<F>(name: &str, mut configure: F) where F: FnMut(&mut Command) -> &mut Command {
+fn run<S, F>(name: S, mut configure: F)
+    where S: AsRef<OsStr>, F: FnMut(&mut Command) -> &mut Command
+{
     let mut command = Command::new(name);
-    if !ok!(configure(&mut command).status()).success() {
+    let command = configure(&mut command);
+    if !ok!(command.status()).success() {
+        panic!("failed to execute {:?}", command);
+    }
+}
+
+#[allow(unused_must_use)]
+fn run_default<S, F>(name: S, mut configure: F)
+    where S: AsRef<OsStr>, F: FnMut(&mut Command) -> &mut Command
+{
+    const PROMPT_COUNT: usize = 100;
+    let mut command = Command::new(name);
+    let command = configure(&mut command).stdin(Stdio::piped());
+    let mut process = ok!(command.spawn());
+    {
+        let pipe = ok!(process.stdin.as_mut());
+        for _ in 0..PROMPT_COUNT {
+            pipe.write_all(b"\n");
+        }
+    }
+    if !ok!(process.wait()).success() {
         panic!("failed to execute {:?}", command);
     }
 }
