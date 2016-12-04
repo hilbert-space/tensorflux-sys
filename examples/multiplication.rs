@@ -106,11 +106,12 @@ unsafe fn compute() {
 
     assert_eq!(data, &[1.0 * 4.0, 2.0 * 5.0, 3.0 * 6.0]);
 
+    ffi::TF_DeleteTensor(tensor);
     ok!(ffi::TF_CloseSession(session, status));
     ok!(ffi::TF_DeleteSession(session, status));
-    ffi::TF_DeleteTensor(tensor);
-    ffi::TF_DeleteStatus(status);
     ffi::TF_DeleteSessionOptions(options);
+    ffi::TF_DeleteGraph(graph);
+    ffi::TF_DeleteStatus(status);
 
     unsafe extern fn noop(_: *mut c_void, _: size_t, _: *mut c_void) {}
 }
