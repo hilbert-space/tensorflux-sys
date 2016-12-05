@@ -32,6 +32,13 @@ pub enum TF_Graph {}
 #[derive(Clone, Copy, Debug)]
 pub enum TF_ImportGraphDefOptions {}
 
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct TF_Input {
+    pub operation: *mut TF_Operation,
+    pub index: c_int,
+}
+
 #[derive(Clone, Copy, Debug)]
 pub enum TF_Operation {}
 
@@ -41,13 +48,6 @@ pub enum TF_OperationDescription {}
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
 pub struct TF_Output {
-    pub operation: *mut TF_Operation,
-    pub index: c_int,
-}
-
-#[repr(C)]
-#[derive(Clone, Copy, Debug)]
-pub struct TF_Input {
     pub operation: *mut TF_Operation,
     pub index: c_int,
 }
@@ -106,18 +106,18 @@ extern {
     pub fn TF_OperationInput(input: TF_Input) -> TF_Output;
     pub fn TF_OperationOutputNumConsumers(output: TF_Output) -> c_int;
     pub fn TF_OperationOutputConsumers(output: TF_Output,
-                                       consumers: *mut TF_Input,
-                                       max_consumers: c_int)
+                                       inputs: *mut TF_Input,
+                                       max_inputs: c_int)
                                        -> c_int;
     pub fn TF_OperationNumControlInputs(operation: *mut TF_Operation) -> c_int;
     pub fn TF_OperationGetControlInputs(operation: *mut TF_Operation,
-                                        control_inputs: *mut *mut TF_Operation,
-                                        max_control_inputs: c_int)
+                                        inputs: *mut *mut TF_Operation,
+                                        max_inputs: c_int)
                                         -> c_int;
     pub fn TF_OperationNumControlOutputs(operation: *mut TF_Operation) -> c_int;
     pub fn TF_OperationGetControlOutputs(operation: *mut TF_Operation,
-                                         control_outputs: *mut *mut TF_Operation,
-                                         max_control_outputs: c_int)
+                                         outputs: *mut *mut TF_Operation,
+                                         max_outputs: c_int)
                                          -> c_int;
     pub fn TF_OperationGetAttrMetadata(operation: *mut TF_Operation,
                                        name: *const c_char,
